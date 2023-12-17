@@ -19,12 +19,13 @@ HELP_COMMAND = """
 """
 
 bot = Bot(os.getenv('TELEGRAM_BOT_TOKEN'))
+GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 dp = Dispatcher()
 
 
 @dp.message(CommandStart())
 async def start(message: Message):
-    await bot.send_message(message.from_user.id, text=
+    await bot.send_message(GROUP_CHAT_ID, text=
                         f"Привет, бот запустился \n" \
                         f"✈️ Желаем вам выгодных путешествий✈️ \n" \
                          "Перезапустить бота - /start"
