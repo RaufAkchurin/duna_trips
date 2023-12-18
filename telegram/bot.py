@@ -1,7 +1,6 @@
 import logging
 import sys
 import asyncio
-import time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Bot, Dispatcher, F, types
@@ -11,7 +10,7 @@ import os
 from dotenv import load_dotenv
 
 from telegram import bot_kb
-from telegram.special_offers import special_offers, special_offers_message
+from telegram.special_offers import special_offers
 
 load_dotenv()
 
@@ -29,19 +28,20 @@ scheduler = AsyncIOScheduler()
 
 
 async def scheduler_setup(scheduler):
-    scheduler.add_job(special_offers, "cron", hour=11, minute=51, second=15, args=(bot,))
-    scheduler.add_job(special_offers, "cron", hour=11, minute=52, second=15, args=(bot,))
+    scheduler.add_job(special_offers, "cron", hour=12, minute=13, second=0, args=(bot,))
+    scheduler.add_job(special_offers, "cron", hour=12, minute=14, second=0, args=(bot,))
+    scheduler.add_job(special_offers, "cron", day_of_week='sat', hour=11, minute=0, second=0, args=(bot,))
+    scheduler.add_job(special_offers, "cron", day_of_week='wed', hour=11, minute=0, second=0, args=(bot,))
     scheduler.start()
 
 
 @dp.message(CommandStart())
 async def start(message: Message):
-    await scheduler_setup(scheduler)
-    await bot.send_message(GROUP_CHAT_ID, text=
+    await bot.send_message(message.chat.id, text=
     f"Привет, бот запустился \n" \
     f"✈️ Желаем вам выгодных путешествий✈️ \n" \
     "Перезапустить бота - /start"
-                           , reply_markup=bot_kb.main_kb)
+    , reply_markup=bot_kb.main_kb)
 
 
 dp.message.register(special_offers, F.text == 'Свежие билеты')
@@ -53,8 +53,8 @@ async def handle_special_offers(message: types.Message):
 
 
 async def main() -> None:
-    await bot.delete_webhook(
-        drop_pending_updates=True)  # все команды при выключенном боте после включении его не будут обрабатываться
+    await bot.delete_webhook(drop_pending_updates=True)  # команды после включения не придут старые
+    await scheduler_setup(scheduler)
     await dp.start_polling(bot)
 
 
