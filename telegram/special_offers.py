@@ -56,10 +56,10 @@ def special_offers_message():
         return None
 
 
-async def special_offers(message: Message, bot: Bot):
+async def special_offers(bot: Bot):
     message_text = special_offers_message()
     if message_text:
         await bot.send_message(chat_id=GROUP_CHAT_ID, text=message_text, parse_mode=ParseMode.MARKDOWN,
                                disable_web_page_preview=True)
     else:
-        await bot.send_message(message.from_user.id, text=f'Специальные предложения отсутствуют на данный момент')
+        await bot.send_message(chat_id=GROUP_CHAT_ID, text=f'Специальные предложения отсутствуют на данный момент')
