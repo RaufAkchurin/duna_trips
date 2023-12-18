@@ -4,3 +4,4 @@ devops_info.env
 *.out
 *.xlsx
 *.xlsx#
+/trip_admin/.idea/
