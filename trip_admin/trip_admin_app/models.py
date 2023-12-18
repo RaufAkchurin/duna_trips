@@ -1,13 +1,13 @@
 from django.db import models
 
 
-class Group(models.Model):
+class Chanel(models.Model):
     name = models.CharField(max_length=20)
-    group_chat_id = models.CharField(max_length=14)
+    chanel_chat_id = models.CharField(max_length=14)
 
     class Meta:
-        verbose_name = 'Телеграм группа'
-        verbose_name_plural = 'Телеграм группы'
+        verbose_name = 'Телеграм канал'
+        verbose_name_plural = 'Телеграм каналы'
 
     def __str__(self):
         return f"{self.name}"
@@ -15,7 +15,7 @@ class Group(models.Model):
 
 class Post(models.Model):
     name = models.CharField(max_length=40)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
 
     class Meta:

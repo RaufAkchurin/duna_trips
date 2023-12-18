@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import Chanel
+from .serializers import ChanelSerializer
+
+
+class ChanelListView(viewsets.ModelViewSet):
+    serializer_class = ChanelSerializer
+    queryset = Chanel.objects.all()
