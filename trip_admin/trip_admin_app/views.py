@@ -7,3 +7,5 @@ from .serializers import ChanelSerializer
 class ChanelListView(viewsets.ModelViewSet):
     serializer_class = ChanelSerializer
     queryset = Chanel.objects.all()
+
+
