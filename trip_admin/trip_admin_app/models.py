@@ -73,8 +73,3 @@ class TicketsList(models.Model):
 
     def __str__(self):
         return f"Для {self.chanel.name}"
-
-
-
-
-
