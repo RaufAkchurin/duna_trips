@@ -5,7 +5,7 @@ from aiogram import Bot
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from telegram.API import get_special_offers
+from telegram.API import get_special_offers, get_chanel_list
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -58,8 +58,11 @@ def special_offers_message():
 
 async def special_offers(bot: Bot):
     message_text = special_offers_message()
+    chanels = get_chanel_list()
     if message_text:
-        await bot.send_message(chat_id=GROUP_CHAT_ID, text=message_text, parse_mode=ParseMode.MARKDOWN,
-                               disable_web_page_preview=True, protect_content=False)
+        for chanel in chanels:
+            await bot.send_message(chat_id=chanel["chanel_chat_id"], text=message_text, parse_mode=ParseMode.MARKDOWN,
+                                   disable_web_page_preview=True, protect_content=False)
     else:
-        await bot.send_message(chat_id=GROUP_CHAT_ID, text=f'Специальные предложения отсутствуют на данный момент')
+        for chanel in chanels:
+            await bot.send_message(chat_id=chanel["chanel_chat_id"], text=f'Специальные предложения отсутствуют на данный момент')

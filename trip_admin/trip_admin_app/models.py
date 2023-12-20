@@ -26,4 +26,15 @@ class Post(models.Model):
         return f"{self.name}"
 
 
+# class Direction(models.Model):
+#     name = models.CharField(max_length=100)
+#     code = models.CharField(max_length=3)
+#
+#     class Meta:
+#         verbose_name = 'Направление'
+#         verbose_name_plural = 'Направления'
+#
+#     def __str__(self):
+#         return f"{self.name}"
+
 
