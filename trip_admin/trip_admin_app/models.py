@@ -26,9 +26,19 @@ class Post(models.Model):
         return f"{self.name}"
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = 'Страна'
+        verbose_name_plural = 'Страны'
+
+
 class City(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name='Название')
     code = models.CharField(max_length=3, unique=True, verbose_name='IATA код города')
+
 
     class Meta:
         verbose_name = 'Город'
