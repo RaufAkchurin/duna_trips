@@ -13,19 +13,6 @@ class Chanel(models.Model):
         return f"{self.name}"
 
 
-class Post(models.Model):
-    name = models.CharField(max_length=40)
-    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE)
-    text = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = 'Пост'
-        verbose_name_plural = 'Посты'
-
-    def __str__(self):
-        return f"{self.name}"
-
-
 class Country(models.Model):
     code = models.CharField(max_length=10)
 
@@ -50,11 +37,24 @@ class City(models.Model):
         return f"{self.name}"
 
 
+class Post(models.Model):
+    name = models.CharField(max_length=40)
+    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE)
+    text = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Destination(models.Model):
     origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='origin_trips', verbose_name='Откуда')
     destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination_trips',
                                     verbose_name='Куда')
-    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, related_name='destination_chanel', verbose_name='Для канала')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='destination_post', verbose_name='К посту')
 
     class Meta:
         verbose_name = 'Направление'
@@ -62,15 +62,3 @@ class Destination(models.Model):
 
     def __str__(self):
         return f"Из {self.origin.name} в {self.destination.name}"
-
-
-class TicketsList(models.Model):
-    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, verbose_name='Для канала')
-    destinations = models.ManyToManyField(Destination, verbose_name='Направления')
-
-    class Meta:
-        verbose_name = 'Подборка билетов'
-        verbose_name_plural = 'Подборки билетов'
-
-    def __str__(self):
-        return f"Для {self.chanel.name}"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Chanel, Post, City, Destination, TicketsList, Country
+from .models import Chanel, Post, City, Destination, Country
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -14,17 +14,23 @@ class CityAdmin(admin.ModelAdmin):
 
 
 class DestinationAdmin(admin.ModelAdmin):
-    raw_id_fields = ("origin", "destination", "chanel")
-    list_filter = ["chanel"]
+    raw_id_fields = ("origin", "destination")
+    list_filter = ["post"]
 
 
-class TicketsListAdmin(admin.ModelAdmin):
+class DestinationsInline(admin.TabularInline):  # Только для отображения выплат внеутри категории командировки
+    model = Destination
+    extra = 1  # Количество дополнительных форм для добавления прямо в интерфейсе
+    raw_id_fields = ("origin", "destination")
+
+
+class PostAdmin(admin.ModelAdmin):
+    inlines = [DestinationsInline]
+    list_display = ("chanel", "text", "name",)
     list_filter = ("chanel",)
 
 
 admin.site.register(Chanel)
-admin.site.register(Post)
+admin.site.register(Post, PostAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(City, CityAdmin)
-admin.site.register(Destination, DestinationAdmin)
-admin.site.register(TicketsList, )
