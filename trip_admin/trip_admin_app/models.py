@@ -42,7 +42,6 @@ class City(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
     code = models.CharField(max_length=3, unique=True, verbose_name='IATA код города')
 
-
     class Meta:
         verbose_name = 'Город'
         verbose_name_plural = 'Города'
@@ -53,7 +52,9 @@ class City(models.Model):
 
 class Destination(models.Model):
     origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='origin_trips', verbose_name='Откуда')
-    destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination_trips', verbose_name='Куда')
+    destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination_trips',
+                                    verbose_name='Куда')
+    chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, related_name='destination_chanel', verbose_name='Для канала')
 
     class Meta:
         verbose_name = 'Направление'
@@ -65,7 +66,7 @@ class Destination(models.Model):
 
 class TicketsList(models.Model):
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, verbose_name='Для канала')
-    destinations = models.ForeignKey(Destination, on_delete=models.CASCADE, verbose_name='Направления')
+    destinations = models.ManyToManyField(Destination, verbose_name='Направления')
 
     class Meta:
         verbose_name = 'Подборка билетов'
@@ -73,8 +74,3 @@ class TicketsList(models.Model):
 
     def __str__(self):
         return f"Для {self.chanel.name}"
-
-
-
-
-
