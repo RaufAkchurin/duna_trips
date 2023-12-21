@@ -33,6 +33,9 @@ class Country(models.Model):
         verbose_name = 'Страна'
         verbose_name_plural = 'Страны'
 
+    def __str__(self):
+        return f"{self.code}"
+
 
 class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)

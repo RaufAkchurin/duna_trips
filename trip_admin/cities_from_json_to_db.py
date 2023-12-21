@@ -6,7 +6,7 @@ import json
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "trip_admin.settings")  # Замените "trip_admin" на имя вашего Django-проекта
 django.setup()
 
-from trip_admin_app.models import City  # Замените 'trip_admin_app' на имя вашего Django-приложения
+from trip_admin_app.models import City, Country  # Замените 'trip_admin_app' на имя вашего Django-приложения
 
 
 def update_cities_from_json(file_path):
@@ -15,14 +15,19 @@ def update_cities_from_json(file_path):
 
     for city_data in data:
         code_value = city_data['code']
-        name_value = city_data['cases']['su']
+        name_value = city_data['cases']['su'].lower()
+        country_code_value = city_data['country_code']
+
+        # Проверка существования страны с таким кодом
+        country, created = Country.objects.get_or_create(code=country_code_value)
 
         # Проверка существования города с таким кодом
-        city, created = City.objects.get_or_create(code=code_value, defaults={'name': name_value})
+        city, created = City.objects.get_or_create(code=code_value, defaults={'name': name_value, 'country': country})
 
-        # Если город уже существует, обновляем его название
+        # Если город уже существует, обновляем его название и страну
         if not created:
             city.name = name_value
+            city.country = country
             city.save()
 
 
