@@ -38,7 +38,8 @@ class PostSerializer(serializers.ModelSerializer):
             "chanel",
             "text",
             "destinations",
-            "last_viewed_destination_id"
+            "last_viewed_destination_index",
+            "count_of_directions_in_post",
         )
 
     def get_destinations(self, Post):
