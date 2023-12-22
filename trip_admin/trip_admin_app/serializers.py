@@ -27,11 +27,13 @@ class DestinationSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    chanel = ChanelSerializer(read_only=True)
     destinations = serializers.SerializerMethodField(source="id")
 
     class Meta:
         model = Post
         fields = (
+            "id",
             "name",
             "chanel",
             "text",
@@ -43,3 +45,11 @@ class PostSerializer(serializers.ModelSerializer):
         destinations = Destination.objects.filter(post__id=Post.id)
         destination_serializer = DestinationSerializer(destinations, many=True)
         return destination_serializer.data
+
+
+class PostLastViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            "last_viewed_destination_id",
+        )

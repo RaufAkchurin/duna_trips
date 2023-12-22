@@ -1,6 +1,6 @@
 
 from .models import Chanel, Post
-from .serializers import ChanelSerializer, PostSerializer
+from .serializers import ChanelSerializer, PostSerializer, PostLastViewSerializer
 from rest_framework import viewsets
 
 
@@ -14,6 +14,15 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
 
 
+class PostLastViewChanger(viewsets.ModelViewSet):
+    serializer_class = PostLastViewSerializer
+    queryset = Post.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        post_id = kwargs['pk']
+        post = Post.objects.filter(id=post_id).last()
+        post.last_viewed_destination_id = request.data["last_viewed_destination_id"]
+        return super().update(request, *args, **kwargs)
 
 
 
