@@ -21,7 +21,7 @@ class PostLastViewChanger(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         post_id = kwargs['pk']
         post = Post.objects.filter(id=post_id).last()
-        post.last_viewed_destination_id = request.data["last_viewed_destination_id"]
+        post.last_viewed_destination_index = request.data["last_viewed_destination_index"]
         return super().update(request, *args, **kwargs)
 
 

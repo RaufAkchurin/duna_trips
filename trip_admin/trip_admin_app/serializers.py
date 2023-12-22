@@ -51,5 +51,6 @@ class PostLastViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
-            "last_viewed_destination_id",
+            "id",
+            "last_viewed_destination_index",
         )

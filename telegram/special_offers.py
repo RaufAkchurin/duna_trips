@@ -55,33 +55,17 @@ def special_offers_message(origin, destination):
         return None
 
 
-def get_destination_index_by_id(destinations: list, target_id):
-    for index, destination in enumerate(destinations):
-        if destination["id"] == target_id:
-            return index
-    return None  # Return None if the id is not found
-
-
 def get_actual_destination(post):
     destinations = post['destinations']
+    next_index = int(post["last_viewed_destination_id"]) + 1
 
-    try:
-        if post["last_viewed_destination_id"] == 0:
-            actual_destination = destinations[0]
+    if len(destinations) - 1 >= next_index:
+        destination = destinations[next_index]
+    else:
+        destination = destinations[0]
+    # TODO записать новый индекс в БД
+    return destination
 
-        else:
-            last_index = get_destination_index_by_id(
-                destinations=destinations,
-                target_id=post["last_viewed_destination_id"]
-            )
-            if len(destinations) > last_index:
-                actual_destination = destinations[last_index + 1]
-            else:
-                actual_destination = destinations[0]
-    except:
-        actual_destination = destinations[0]
-
-    return actual_destination
 
 
 async def special_offers(bot: Bot):

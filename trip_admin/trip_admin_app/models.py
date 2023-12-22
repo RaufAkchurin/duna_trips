@@ -41,7 +41,7 @@ class Post(models.Model):
     name = models.CharField(max_length=40)
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
-    last_viewed_destination_id = models.PositiveIntegerField(default=0, verbose_name='Последнее публикованное направление(id)')
+    last_viewed_destination_index = models.IntegerField(default=-1, verbose_name='Индекс последнего опубликованого направления')
 
     class Meta:
         verbose_name = 'Пост'
