@@ -21,7 +21,7 @@ class DestinationAdmin(admin.ModelAdmin):
 class DestinationsInline(admin.TabularInline):  # Только для отображения выплат внеутри категории командировки
     model = Destination
     extra = 1  # Количество дополнительных форм для добавления прямо в интерфейсе
-    raw_id_fields = ("origin", "destination")
+    raw_id_fields = ("origin", "destination",)
 
 
 class PostAdmin(admin.ModelAdmin):
