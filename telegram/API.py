@@ -40,6 +40,6 @@ def put_post_last_view_changer(post_id, new_last_view):
     url = f"{BASE_URL_ADMIN}/post_last_view_changer/{post_id}"
     response = requests.put(url=url, data={"last_viewed_destination_index": new_last_view})
     if response.status_code == 200:
-        return response.json()["data"]
+        return response.json()
     else:
         return None

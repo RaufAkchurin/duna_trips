@@ -5,7 +5,7 @@ from aiogram import Bot
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from telegram.API import get_special_offers, get_post_list
+from telegram.API import get_special_offers, get_post_list, put_post_last_view_changer
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -44,7 +44,6 @@ def data_formatted(timestamp_str):
 
 def special_offers_message(post):
     message = f"✈️  {post['text']}  ✈️ \n \n"
-
     destinations = package_of_destinations(post)
     for destination in destinations:
         tickets = get_special_offers(destination['origin_code'], destination['destination_code'])
@@ -61,46 +60,54 @@ def special_offers_message(post):
 
 
 def package_of_destinations(post_json):
-    lst = post_json['destinations']
-    count_of_directions_in_post = int(post_json['count_of_directions_in_post'])
-    index = post_json['last_viewed_destination_index']
+    path_list = post_json['destinations']
+    last_index = int(post_json['last_viewed_destination_index'])
+    paths_per_batch = int(post_json['count_of_directions_in_post'])
 
-    if not lst:
-        print("Список пуст.")
-        return
+    if not path_list or paths_per_batch <= 0:
+        return None, None
 
-    list_length = len(lst)
-    iterations = 0  # Для отслеживания количества итераций
+    total_paths = len(path_list)
+    batch_index = 0
+    processed_indices = set()  # Множество для отслеживания уже обработанных индексов
+    processed_paths = []
 
-    while iterations < list_length:
-        # Выбираем следующие 5 элементов из списка
-        package_of_destinations = lst[index:index + count_of_directions_in_post]
+    for i in range(last_index + 1, last_index + 1 + min(paths_per_batch, total_paths)):
+        current_index = i % total_paths
 
-        # Увеличиваем индекс и обрабатываем круговой переход
-        index = (index + 5) % list_length
+        # Проверяем, был ли уже обработан этот индекс
+        if current_index in processed_indices:
+            continue
 
-        # Увеличиваем количество итераций
-        iterations += 1
+        # Добавляем индекс в множество обработанных
+        processed_indices.add(current_index)
 
-    return package_of_destinations
+        # Обработка значения
+        current_path = path_list[current_index]
+        processed_paths.append(current_path)
+
+
+    last_index = str((last_index + min(paths_per_batch, total_paths)) % total_paths)
+    put_post_last_view_changer(post_id=post_json['id'], new_last_view=last_index)  # Обновляем индекс последнего опубликованного направления
+    # Возвращаем последний обработанный индекс и значения из списка путей (как список)
+    return processed_paths
 
 
 async def special_offers(bot: Bot):
     posts = get_post_list()
+    for post in posts:
+        chat_id = post['chanel']["chanel_chat_id"]
+        message = special_offers_message(post)
+        if message:
+            await bot.send_message(chat_id=chat_id,
+                                   text=message,
+                                   parse_mode=ParseMode.MARKDOWN,
+                                   disable_web_page_preview=True,
+                                   protect_content=False)
 
-    try:
-        for post in posts:
-            chat_id = post['chanel']["chanel_chat_id"]
-            message = special_offers_message(post)
-            if message:
-                await bot.send_message(chat_id=chat_id,
-                                       text=message,
-                                       parse_mode=ParseMode.MARKDOWN,
-                                       disable_web_page_preview=True,
-                                       protect_content=False)
-    except Exception as e:
-        await bot.send_message(chat_id='-1001956834579',
-                               text=e,
-                               parse_mode=ParseMode.MARKDOWN,
-                               disable_web_page_preview=True,
-                               protect_content=False)
+    # except Exception as e:
+    #     await bot.send_message(chat_id='-1001956834579',
+    #                            text=str(e),
+    #                            parse_mode=ParseMode.MARKDOWN,
+    #                            disable_web_page_preview=True,
+    #                            protect_content=False)
