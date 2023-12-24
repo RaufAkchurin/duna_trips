@@ -42,18 +42,22 @@ def data_formatted(timestamp_str):
     return f"{day} {months.get(str(month))}"
 
 
-def special_offers_message(origin, destination):
-    trips = get_special_offers(origin, destination)
-    message = "✈️Спецальные предложения с вылетом из Казани✈️ \n \n"  # из казаНИ прям с ендпоинта вытаскивать авиасейлс
-    if trips:
-        for trip in trips:
-            message += (f"🔥{data_formatted(trip['departure_at'])} "
-                        f"из {trip['origin_name_declined']} {trip['destination_name_declined']} "
-                        f"за {trip['price']} р [ссылка]({link_generator(trip['link'])}) \n")
-        message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации."
-        return message
-    else:
-        return None
+def special_offers_message(post):
+    message = f"✈️  {post['text']}  ✈️ \n \n"
+
+    destinations = package_of_destinations(post)
+    for destination in destinations:
+        tickets = get_special_offers(destination['origin_code'], destination['destination_code'])
+        if tickets:
+            for ticket in tickets:
+                message += (f"🔥{data_formatted(ticket['departure_at'])} "
+                            f"из {ticket['origin_name_declined']} {ticket['destination_name_declined']} "
+                            f"за {ticket['price']} р [ссылка]({link_generator(ticket['link'])}) \n")
+        else:
+            pass
+
+    message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации."
+    return message
 
 
 def package_of_destinations(post_json):
@@ -84,15 +88,19 @@ def package_of_destinations(post_json):
 async def special_offers(bot: Bot):
     posts = get_post_list()
 
-    for post in posts:
-        chat_id = post['chanel']["chanel_chat_id"]
-        destinations = package_of_destinations(post)
-
-        for destination in destinations:
-            message = special_offers_message(destination['origin_code'], destination['destination_code'])
+    try:
+        for post in posts:
+            chat_id = post['chanel']["chanel_chat_id"]
+            message = special_offers_message(post)
             if message:
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
                                        parse_mode=ParseMode.MARKDOWN,
                                        disable_web_page_preview=True,
                                        protect_content=False)
+    except Exception as e:
+        await bot.send_message(chat_id='-1001956834579',
+                               text=e,
+                               parse_mode=ParseMode.MARKDOWN,
+                               disable_web_page_preview=True,
+                               protect_content=False)
