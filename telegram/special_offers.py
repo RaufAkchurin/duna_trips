@@ -19,8 +19,6 @@ def link_generator(link):
 
 
 def data_formatted(timestamp_str):
-    timestamp_str = timestamp_str
-
     months = {
         '1': 'января',
         '2': 'февраля',
@@ -42,6 +40,31 @@ def data_formatted(timestamp_str):
     return f"{day} {months.get(str(month))}"
 
 
+def weekday(timestamp_str):
+    week_days = {
+        'Monday': 'понедельник',
+        'Tuesday': 'вторник',
+        'Wednesday': 'среда',
+        'Thursday': 'четверг',
+        'Friday': 'пятница',
+        'Saturday': 'суббота',
+        'Sunday': 'воскресенье',
+    }
+
+    day = datetime.fromisoformat(timestamp_str[:-6])
+    weekday = day.strftime("%A")
+
+    return f"{week_days.get(str(weekday))}"
+
+
+def price(price):
+    if price is None:
+        return None
+    else:
+        price = f"{int(price): ,}".replace(',', ' ') + " ₽"
+        return price
+
+
 def special_offers_message(post):
     message = f"✈️  {post['text']}  ✈️ \n \n"
     destinations = package_of_destinations(post)
@@ -49,9 +72,13 @@ def special_offers_message(post):
         tickets = get_special_offers(destination['origin_code'], destination['destination_code'])
         if tickets:
             for ticket in tickets:
-                message += (f"🔥{data_formatted(ticket['departure_at'])} "
-                            f"из {ticket['origin_name_declined']} {ticket['destination_name_declined']} "
-                            f"за {ticket['price']} р [ссылка]({link_generator(ticket['link'])}) \n")
+                departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
+                formatted_time = departure_time.strftime("%H:%M")
+
+                message += (f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
+                            f"\n <i>{ticket['origin_name']}({ticket['origin']}) - {ticket['destination_name']}({ticket['destination']})</i>"
+                            f"\n 💸 {price(ticket['price'])}"
+                            f"\n <a href='{link_generator(ticket['link'])}'>Купить билет</a>\n\n")
         else:
             pass
 
@@ -101,7 +128,7 @@ async def special_offers(bot: Bot):
         if message:
             await bot.send_message(chat_id=chat_id,
                                    text=message,
-                                   parse_mode=ParseMode.MARKDOWN,
+                                   parse_mode=ParseMode.HTML,
                                    disable_web_page_preview=True,
                                    protect_content=False)
 

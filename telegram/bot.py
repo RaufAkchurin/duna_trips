@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from telegram import bot_kb
 from telegram.special_offers import special_offers
 
+
 load_dotenv()
 
 HELP_COMMAND = """
