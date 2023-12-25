@@ -1,12 +1,11 @@
 import os
-import time
 from datetime import datetime
 
 from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from telegram.API import get_special_offers, get_post_list, put_post_last_view_changer, get_grouped_prices_by_month
+from telegram.API import  get_post_list, get_grouped_prices_by_month
 from telegram.special_offers import package_of_destinations, data_formatted, link_generator, price, weekday
 
 load_dotenv()
@@ -19,7 +18,7 @@ def monthly_offers_message(post):
     for destination in destinations:
         tickets = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
         if tickets:
-            for ticket in tickets:
+            for ticket in tickets.items():
                 departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
                 formatted_time = departure_time.strftime("%H:%M")
 
