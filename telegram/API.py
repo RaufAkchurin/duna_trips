@@ -27,7 +27,7 @@ def get_current_month():  # month in format 2023-12
 
 def get_grouped_prices_by_month(origin, destination):  # month in format 2023-12
     url = (f"{BASE_URL_AVIASALES}v3/grouped_prices?origin={origin}"
-           f"&destination={destination}&currency=usd&departure_at={get_current_month()}"
+           f"&destination={destination}&currency=rub&departure_at={get_current_month()}"
            f"&group_by=departure_at&token={os.getenv('AVIASALES_TOKEN')}")
 
     response = requests.get(url=url)
