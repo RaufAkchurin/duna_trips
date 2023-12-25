@@ -37,6 +37,7 @@ class PostSerializer(serializers.ModelSerializer):
             "name",
             "chanel",
             "text",
+            "picture",
             "destinations",
             "last_viewed_destination_index",
             "count_of_directions_in_post",

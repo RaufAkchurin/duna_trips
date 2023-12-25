@@ -126,17 +126,14 @@ async def special_offers(bot: Bot):
     posts = get_post_list()
     for post in posts:
         chat_id = post['chanel']["chanel_chat_id"]
+        file_name = os.path.basename(post['picture'])
         message = special_offers_message(post)
         if message:
             await bot.send_photo(chat_id=chat_id,
                                  photo=types.FSInputFile(
-                                     path="/home/rauf/PycharmProjects1/Trip/telegram/img.png"),
+                                     path=f"/home/rauf/PycharmProjects1/Trip/trip_admin/media/post_pictures/{file_name}"),
                                  caption=message,
                                  parse_mode=ParseMode.HTML)
-            # await bot.send_message(chat_id=chat_id,
-            #                        text=message,
-            #                        parse_mode=ParseMode.HTML,
-            #                        disable_web_page_preview=True)
 
     # except Exception as e:
     #     await bot.send_message(chat_id='-1001956834579',
