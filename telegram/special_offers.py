@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 
-from aiogram import Bot
-from aiogram.enums import ParseMode
+from aiogram import Bot, types
+from aiogram.enums import ParseMode, parse_mode
 from dotenv import load_dotenv
 
 from telegram.API import get_special_offers, get_post_list, put_post_last_view_changer
@@ -75,10 +75,12 @@ def special_offers_message(post):
                 departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
                 formatted_time = departure_time.strftime("%H:%M")
 
-                message += (f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
-                            f"\n <i>{ticket['origin_name']}({ticket['origin']}) - {ticket['destination_name']}({ticket['destination']})</i>"
-                            f"\n 💸 {price(ticket['price'])}"
-                            f"\n <a href='{link_generator(ticket['link'])}'>Купить билет</a>\n\n")
+                message += (
+                    f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
+                    f"\n <i>{ticket['origin_name']}({ticket['origin']}) - {ticket['destination_name']}({ticket['destination']})</i>"
+                    f"\n 💸 {price(ticket['price'])}"
+                    f"\n <a href='{link_generator(ticket['link'])}'>Купить билет</a>\n\n"
+                )
         else:
             pass
 
@@ -113,9 +115,9 @@ def package_of_destinations(post_json):
         current_path = path_list[current_index]
         processed_paths.append(current_path)
 
-
     last_index = str((last_index + min(paths_per_batch, total_paths)) % total_paths)
-    put_post_last_view_changer(post_id=post_json['id'], new_last_view=last_index)  # Обновляем индекс последнего опубликованного направления
+    put_post_last_view_changer(post_id=post_json['id'],
+                               new_last_view=last_index)  # Обновляем индекс последнего опубликованного направления
     # Возвращаем последний обработанный индекс и значения из списка путей (как список)
     return processed_paths
 
@@ -126,11 +128,15 @@ async def special_offers(bot: Bot):
         chat_id = post['chanel']["chanel_chat_id"]
         message = special_offers_message(post)
         if message:
-            await bot.send_message(chat_id=chat_id,
-                                   text=message,
-                                   parse_mode=ParseMode.HTML,
-                                   disable_web_page_preview=True,
-                                   protect_content=False)
+            await bot.send_photo(chat_id=chat_id,
+                                 photo=types.FSInputFile(
+                                     path="/home/rauf/PycharmProjects1/Trip/telegram/img.png"),
+                                 caption=message,
+                                 parse_mode=ParseMode.HTML)
+            # await bot.send_message(chat_id=chat_id,
+            #                        text=message,
+            #                        parse_mode=ParseMode.HTML,
+            #                        disable_web_page_preview=True)
 
     # except Exception as e:
     #     await bot.send_message(chat_id='-1001956834579',
