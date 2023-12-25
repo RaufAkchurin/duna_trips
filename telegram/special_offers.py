@@ -116,7 +116,6 @@ def special_offers_message(post):
                 )
         else:
             pass
-    print(count)
 
     message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации."
     return message
