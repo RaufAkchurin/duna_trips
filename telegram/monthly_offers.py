@@ -6,7 +6,8 @@ from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from telegram.API import get_special_offers, get_post_list, put_post_last_view_changer
+from telegram.API import get_special_offers, get_post_list, put_post_last_view_changer, get_grouped_prices_by_month
+from telegram.special_offers import package_of_destinations, data_formatted, link_generator, price, weekday
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -16,7 +17,7 @@ def monthly_offers_message(post):
     message = f"✈️  {post['text']}  ✈️ \n \n"
     destinations = package_of_destinations(post)
     for destination in destinations:
-        tickets = get_special_offers(destination['origin_code'], destination['destination_code'])
+        tickets = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
         if tickets:
             for ticket in tickets:
                 departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])

@@ -10,6 +10,7 @@ import os
 from dotenv import load_dotenv
 
 from telegram import bot_kb
+from telegram.monthly_offers import monthly_offers
 from telegram.special_offers import special_offers
 
 
@@ -29,7 +30,7 @@ scheduler = AsyncIOScheduler()
 
 
 async def scheduler_setup(scheduler):
-    scheduler.add_job(special_offers, "cron", second="*/30", args=(bot,))
+    # scheduler.add_job(special_offers, "cron", second="*/30", args=(bot,))
     scheduler.start()
 
 
@@ -48,6 +49,11 @@ dp.message.register(special_offers, F.text == 'Свежие билеты')
 @dp.message(Command('special_offers'))
 async def handle_special_offers(message: types.Message):
     await special_offers(bot=bot)
+
+
+@dp.message(Command('monthly_offers'))
+async def handle_monthly_offers(message: types.Message):
+    await monthly_offers(bot=bot)
 
 
 async def main() -> None:
