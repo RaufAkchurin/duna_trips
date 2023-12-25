@@ -1,3 +1,4 @@
+import datetime
 import os
 from pprint import pprint
 
@@ -19,7 +20,25 @@ def get_special_offers(origin, destination):
         return None
 
 
-# Admin panel django
+def get_current_month():  # month in format 2023-12
+    current_date = datetime.now()
+    formatted_month = current_date.strftime('%Y-%m')
+    return formatted_month
+
+
+def get_grouped_prices_by_month(origin, destination):  # month in format 2023-12
+    url = (f"{BASE_URL_AVIASALES}v3/grouped_prices?origin={origin}"
+           f"&destination={destination}&currency=usd&departure_at={get_current_month()}"
+           f"&group_by=departure_at&token={os.getenv('AVIASALES_TOKEN')}")
+
+    response = requests.get(url=url)
+    if response.status_code == 200:
+        return response.json()["data"]
+    else:
+        return None
+
+
+###################################### Admin panel django  ################################
 load_dotenv()
 BASE_URL_ADMIN = 'http://' + os.getenv('LOCALHOST_IP') + '/api/v1'
 
