@@ -42,7 +42,7 @@ class Post(models.Model):
     name = models.CharField(max_length=40)
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
-    picture = models.ImageField(upload_to='post_pictures/',null=True, blank=True, verbose_name='Изображение поста')
+    picture = models.ImageField(upload_to='post_pictures/', verbose_name='Изображение поста')
     last_viewed_destination_index = models.IntegerField(default=-1, verbose_name='Индекс последнего опубликованого направления')
     count_of_directions_in_post = models.IntegerField(
         default=4,
