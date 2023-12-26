@@ -15,14 +15,18 @@ class ChanelSerializer(serializers.ModelSerializer):
 
 class DestinationSerializer(serializers.ModelSerializer):
     origin_code = serializers.CharField(source="origin.code")
+    origin_name = serializers.CharField(source="origin.name")
     destination_code = serializers.CharField(source="destination.code")
+    destination_name = serializers.CharField(source="destination.name")
 
     class Meta:
         model = Destination
         fields = (
             "id",
             "origin_code",
-            "destination_code"
+            "origin_name",
+            "destination_code",
+            "destination_name",
         )
 
 

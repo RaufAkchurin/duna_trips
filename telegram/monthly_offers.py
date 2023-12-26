@@ -24,7 +24,7 @@ def monthly_offers_message(post):
 
                 message += (
                     f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
-                    f"\n <i>({ticket['origin']}) - ({ticket['destination']})</i>"
+                    f"\n <i>{destination['origin_name'].capitalize()} ({ticket['origin']}) - {destination['destination_name'].capitalize()} ({ticket['destination']})</i>"
                     f"\n 💸 {price(ticket['price'])}"
                     f"\n <a href='{link_generator(ticket['link'])}'>Купить билет</a>\n\n"
                 )
@@ -43,12 +43,6 @@ async def monthly_offers(bot: Bot):
             file_name = os.path.basename(post['picture'])
             message = monthly_offers_message(post)
             if message:
-                # await bot.send_photo(chat_id=chat_id,
-                #                      photo=types.FSInputFile(
-                #                          path=f"/home/rauf/PycharmProjects1/Trip/trip_admin/media/post_pictures/{file_name}"),
-                #                      caption=message,
-                #                      parse_mode=ParseMode.HTML)
-
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
                                        parse_mode=ParseMode.HTML)
