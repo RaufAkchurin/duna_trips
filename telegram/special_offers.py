@@ -5,7 +5,7 @@ from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from telegram.API import get_special_offers, get_post_list, put_post_last_view_changer
+from API import get_special_offers, get_post_list, put_post_last_view_changer
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')

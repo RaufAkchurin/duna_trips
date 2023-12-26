@@ -9,9 +9,9 @@ from aiogram.types import Message
 import os
 from dotenv import load_dotenv
 
-from telegram import bot_kb
-from telegram.monthly_offers import monthly_offers
-from telegram.special_offers import special_offers
+import bot_kb
+from monthly_offers import monthly_offers
+from special_offers import special_offers
 
 
 load_dotenv()
