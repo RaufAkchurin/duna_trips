@@ -38,7 +38,6 @@ def get_grouped_prices_by_month(origin, destination):  # month in format 2023-12
 
 
 ###################################### Admin panel django  ################################
-load_dotenv()
 BASE_URL_ADMIN = 'http://' + os.getenv('LOCALHOST_IP') + '/api/v1'
 
 
