@@ -124,7 +124,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/root/duna_trips/trip_admin/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / '/root/duna_trips/trip_admin/media/'
+MEDIA_ROOT = '/root/duna_trips/trip_admin/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
