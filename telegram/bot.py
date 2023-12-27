@@ -48,12 +48,12 @@ dp.message.register(special_offers, F.text == 'Свежие билеты')
 
 @dp.message(Command('special_offers'))
 async def handle_special_offers(message: types.Message):
-    await special_offers(bot=bot)
+    special_offers(bot=bot)
 
 
 @dp.message(Command('monthly_offers'))
 async def handle_monthly_offers(message: types.Message):
-    await monthly_offers(bot=bot)
+    monthly_offers(bot=bot)
 
 
 async def main() -> None:
