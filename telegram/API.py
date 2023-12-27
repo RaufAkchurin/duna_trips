@@ -62,10 +62,4 @@ def put_post_last_view_changer(post_id, new_last_view):
         return None
 
 
-def test():
-    url = f"https://api.travelpayouts.com/aviasales/v3/get_special_offers?token=38c1785c842c380fd015c9e56ecebdff&destination&locale=ru&origin=AER&destination=DXB"
-    response = requests.get(url=url)
-    return response.json()
-
-
-print(test())
+print(get_post_list())
