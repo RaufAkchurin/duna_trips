@@ -120,7 +120,7 @@ def special_offers_message(post):
     return message
 
 
-def special_offers(bot: Bot):
+async def special_offers(bot: Bot):
     posts = get_post_list()
     try:
         for post in posts:
@@ -128,14 +128,14 @@ def special_offers(bot: Bot):
             file_name = os.path.basename(post['picture'])
             message = special_offers_message(post)
             if message:
-                bot.send_photo(chat_id=chat_id,
+                await bot.send_photo(chat_id=chat_id,
                                      photo=types.FSInputFile(
                                          path=f"/home/rauf/PycharmProjects1/Trip/trip_admin/media/post_pictures/{file_name}"),
                                      caption=message,
                                      parse_mode=ParseMode.HTML)
 
     except Exception as e:
-        bot.send_message(chat_id='-1001956834579',
+        await bot.send_message(chat_id='-1001956834579',
                                text=str(e),
                                parse_mode=ParseMode.MARKDOWN,
                                disable_web_page_preview=True,
