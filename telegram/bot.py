@@ -30,7 +30,7 @@ scheduler = AsyncIOScheduler()
 
 
 async def scheduler_setup(scheduler):
-    # scheduler.add_job(special_offers, "cron", second="*/30", args=(bot,))
+    scheduler.add_job(special_offers, "cron", day_of_week="mon,wed,sat", hour=11, minute=0, second=0, args=(bot,))
     scheduler.start()
 
 
