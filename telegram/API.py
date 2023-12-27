@@ -37,7 +37,7 @@ def get_grouped_prices_by_month(origin, destination):  # month in format 2023-12
         return None
 
 
-BASE_URL_ADMIN = 'http://' + '127.0.0.1' + '/api/v1'
+BASE_URL_ADMIN = 'http://' + os.getenv('LOCALHOST_IP') + '/api/v1'
 
 
 def get_chanel_list():
