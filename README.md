@@ -83,9 +83,9 @@ server {
 }
 
 
-    запуск              gunicorn -c gunicorn_config.py worker.wsgi:application
-    остановка           pkill gunicorn
-    поиск               ps aux | grep 'gunicorn'
+запуск              gunicorn -c gunicorn_config.py worker.wsgi:application
+остановка           pkill gunicorn
+поиск               ps aux | grep 'gunicorn'
 
 
 
@@ -160,6 +160,7 @@ http {
 Чтобы сайт начал работать, Вам нужно настроить симлинк на файл /etc/nginx/sites-available/myproject из папки /etc/nginx/sites-enabled/:
  1) ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled/
  2) рестарт sudo service nginx restart
+ 3) gunicorn -c gunicorn_config.py trip_admin.wsgi:application
  
 
     
