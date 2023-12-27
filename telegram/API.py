@@ -37,9 +37,7 @@ def get_grouped_prices_by_month(origin, destination):  # month in format 2023-12
         return None
 
 
-###################################### Admin panel django  ################################
 BASE_URL_ADMIN = 'http://' + os.getenv('LOCALHOST_IP') + '/api/v1'
-
 
 def get_chanel_list():
     url = f"{BASE_URL_ADMIN}/chanels"
