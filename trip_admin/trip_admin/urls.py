@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('/', admin.site.urls),
+    path('', admin.site.urls),
     path("api/v1/", include("trip_admin_app.urls"))
 ]
 
