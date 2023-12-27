@@ -63,15 +63,15 @@ sudo apt install nginx
 
 server {
     listen 80;
-    server_name 5.35.88.35 dunatrip.ru;
+    server_name 54.335.848.235 выф.ru;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static {
-        alias /root/duna_trips/trip_admin/static;
+        alias /root/duna_trips/trip_admin/static;              # слеш не ставим
     }
 
     location /media/ {
-        root /root/duna_trips/trip_admin/media;
+        root /root/duna_trips/trip_admin;                       # media не пишем, слеш не ставим
     }
 
     location / {
@@ -84,9 +84,14 @@ server {
 
 
 
+
 запуск              gunicorn -c gunicorn_config.py trip_admin.wsgi:application
 остановка           pkill gunicorn
 поиск               ps aux | grep 'gunicorn'
+
+ЛОГИ НГИНКС         cat /var/log/nginx/error.log
+Конфиг НГИНКС       sudo nano /etc/nginx/sites-available/myproject
+Рестарт нгинкс      sudo service nginx restart
 
 
 
