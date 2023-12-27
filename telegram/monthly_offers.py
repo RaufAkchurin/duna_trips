@@ -35,7 +35,7 @@ def monthly_offers_message(post):
     return message
 
 
-async def monthly_offers(bot: Bot):
+def monthly_offers(bot: Bot):
     posts = get_post_list()
     try:
         for post in posts:
@@ -43,12 +43,12 @@ async def monthly_offers(bot: Bot):
             file_name = os.path.basename(post['picture'])
             message = monthly_offers_message(post)
             if message:
-                await bot.send_message(chat_id=chat_id,
+                bot.send_message(chat_id=chat_id,
                                        text=message,
                                        parse_mode=ParseMode.HTML)
 
     except Exception as e:
-        await bot.send_message(chat_id='-1001956834579',
+        bot.send_message(chat_id='-1001956834579',
                                text=str(e),
                                parse_mode=ParseMode.MARKDOWN,
                                disable_web_page_preview=True,
