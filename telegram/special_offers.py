@@ -130,7 +130,7 @@ async def special_offers(bot: Bot):
             if message:
                 await bot.send_photo(chat_id=chat_id,
                                      photo=types.FSInputFile(
-                                         path=f"/home/rauf/PycharmProjects1/Trip/trip_admin/media/post_pictures/{file_name}"),
+                                         path=f"/root/duna_trips/trip_admin/media/post_pictures/{file_name}"),
                                      caption=message,
                                      parse_mode=ParseMode.HTML)
 

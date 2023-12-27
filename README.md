@@ -83,7 +83,7 @@ server {
 }
 
 
-
+**ЗАПУСКАТЬ ГУНИКОРН ТОЛЬКО НА 0.0.0.0:8000 иначе бот не сможет слать запросы внутрь джанги!**
 
 запуск              gunicorn -c gunicorn_config.py trip_admin.wsgi:application
 остановка           pkill gunicorn
