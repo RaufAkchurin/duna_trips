@@ -40,7 +40,7 @@ async def start(message: Message):
     f"Привет, бот запустился \n" \
     f"✈️ Желаем вам выгодных путешествий✈️ \n" \
     "Перезапустить бота - /start"
-    , reply_markup=bot_kb.main_kb)
+                           , reply_markup=bot_kb.main_kb)
 
 
 dp.message.register(special_offers, F.text == 'Свежие билеты')
