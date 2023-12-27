@@ -60,6 +60,3 @@ def put_post_last_view_changer(post_id, new_last_view):
         return response.json()
     else:
         return None
-
-
-print(get_post_list())
