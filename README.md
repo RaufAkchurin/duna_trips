@@ -14,12 +14,23 @@ gunicorn trip_admin.wsgi:application
 
                     Deploy  
 1) Подключаемся к серверу ssh root@555.444.666.777
+2) Пароль от рута в СИРЭЭМКЕ
+3) Добавляем на серва свой ссаш ключь чтобы каждый раз не вводить пароль
+Чтобы прокинуть ключ выполните в терминале на Вашем устройстве команду
 
-2) Клонируем репозиторий https://github.com/RaufAkchurin/worker
+ssh-keygen -t rsa
 
-2) Создаём виртуальную среду
+Нажимаем enter, пока ключ не будет сгенерирован. Пробрасываем его на VPS
 
-3) Запускаем её, накатываем все зависимости
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@512.3512.8218.3215 
+
+Вводим свой пароль от root.
+
+4) Клонируем репозиторий https://github.com/RaufAkchurin/worker
+
+5) Создаём виртуальную среду
+
+6) Запускаем её, накатываем все зависимости
 
 4) Создаём .env и копируем туда данные свои
 **ВНМИАНИЕ!!!**
@@ -178,60 +189,62 @@ http {
         НАСТРОЙКА systemctl (автоматический перезапуск в случае падения)
 
 **Создайте  2 файла службы(для джанго и для бота отдельно):**
-sudo nano /etc/systemd/system/django_app.service
-sudo nano /etc/systemd/system/bot_app.service
+sudo nano /etc/systemd/system/django.service
+sudo nano /etc/systemd/system/bot.service
 
 
 **Добавьте следующие конфигурациюи в файлы службы:**
 [Unit]
-Description=Aiogram bot
+Description=Django
 After=network.target
-Requires=django_app.service
-PartOf=django_app.service
+Requires=django.service
+PartOf=bot.service
 
 [Service]
 Type=simple
-WorkingDirectory=/root/worker
-ExecStart=/root/worker/venv/bin/python3 /root/worker/telegram/bot.py
+WorkingDirectory=/root/duna_trips/trip_admin
+ExecStart=/root/duna_trips/my_venv/bin/gunicorn -c gunicorn_config.py trip_admin.wsgi:application
 KillMode=process
 Restart=always
 RestartSec=10
-EnvironmentFile=/root/worker/.env
+EnvironmentFile=/root/duna_trips/.env
 
 [Install]
 WantedBy=multi-user.target
+
 
 
 №2
 [Unit]
-Description=Django
+Description=bot
 After=network.target
-Requires=django_app.service
-PartOf=aiogram_app.service
+Requires=django.service
+PartOf=django.service
 
 [Service]
 Type=simple
-WorkingDirectory=/root/worker
-ExecStart=/root/worker/venv/bin/gunicorn -c gunicorn_config.py worker.wsgi:application
+WorkingDirectory=/root/duna_trips
+ExecStart=/root/duna_trips/my_venv/bin/python3 /root/duna_trips/telegram/bot.py
 KillMode=process
 Restart=always
 RestartSec=10
-EnvironmentFile=/root/worker/.env
+EnvironmentFile=/root/duna_trips/.env
 
 [Install]
 WantedBy=multi-user.target
 
 
-
-
-
-
             **ПОСЛЕ ПАРВОК В КОНФИГЕ**
 **sudo systemctl daemon-reload**
-**sudo systemctl start worker_app**
-**sudo systemctl start aiogram_app**
-статус проверять вот так **systemctl status worker_app.service**
-статус проверять вот так **systemctl status django_app.service**
+**sudo systemctl start django**
+**sudo systemctl start bot**
+статус проверять вот так **systemctl status django.service**
+статус проверять вот так **systemctl status bot.service**
+
+если что то неработает проверяем логи вот так
+
+journalctl -u django.service
+journalctl -u bot.service
 
 
       АВТОМАТИЧЕСКИЙ ПУШИНГ БАЗЫ НА ГИТХАБ НАСТРОЙКА
