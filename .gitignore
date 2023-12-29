@@ -6,3 +6,4 @@ devops_info.env
 *.xlsx#
 /trip_admin/.idea/
 /trip_admin/.project
+/my_venv/
