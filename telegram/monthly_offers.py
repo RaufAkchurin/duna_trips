@@ -16,6 +16,7 @@ def monthly_offers_message(post):
     message = f"✈️  {post['text']}  ✈️ \n \n"
     destinations = package_of_destinations(post)
     for destination in destinations:
+        message += f" <b>\n{destination['origin_name'].upper()} - {destination['destination_name'].upper()}</b> \n\n"
         tickets = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
         if tickets:
             for ticket in tickets.values():
