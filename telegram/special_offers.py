@@ -130,7 +130,7 @@ async def get_photo_path_by_host_ip(filename):
     return path
 
 
-async def special_offers(bot: Bot):
+async def send_special_offers(bot: Bot):
     posts = get_post_list()
     try:
         for post in posts:
@@ -147,7 +147,7 @@ async def special_offers(bot: Bot):
 
     except Exception as e:
         await bot.send_message(chat_id='5640395403',
-                               text="ERROR TEXT - " + str(e),
+                               text="ERROR TEXT for special_offers - " + str(e),
                                parse_mode=ParseMode.MARKDOWN,
                                disable_web_page_preview=True,
                                protect_content=False)

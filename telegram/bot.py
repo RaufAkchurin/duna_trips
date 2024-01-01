@@ -9,9 +9,9 @@ from aiogram.types import Message
 import os
 from dotenv import load_dotenv
 
-from monthly_offers import monthly_offers
-from special_offers import special_offers
-
+from monthly_offers import send_monthly_offers
+from special_offers import send_special_offers
+from telegram.cheapest_offers import send_cheapest_offers
 
 load_dotenv()
 
@@ -24,12 +24,12 @@ bot = Bot(os.getenv('TELEGRAM_BOT_TOKEN'))
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 dp = Dispatcher()
 
-# Автоматическая отправка сообщений
-scheduler = AsyncIOScheduler()
+scheduler = AsyncIOScheduler()  # Автоматическая отправка сообщений
 
 
 async def scheduler_setup(scheduler):
-    scheduler.add_job(special_offers, "cron", day_of_week="mon,wed,sat", hour=11, minute=0, second=0, args=(bot,))
+    scheduler.add_job(send_special_offers, "cron", day_of_week="mon,wed,sat", hour=6, minute=0, second=0, args=(bot,))
+    scheduler.add_job(send_cheapest_offers, "cron", day_of_week="mon,wed,sat", hour=8, minute=0, second=0, args=(bot,))
     scheduler.start()
 
 
@@ -41,14 +41,19 @@ async def start(message: Message):
     "Перезапустить бота - /start")
 
 
-@dp.message(Command('special_offers'))
+@dp.message(Command('spec'))
 async def handle_special_offers(message: types.Message):
-    await special_offers(bot=bot)
+    await send_special_offers(bot=bot)
 
 
-@dp.message(Command('monthly_offers'))
+@dp.message(Command('month'))
 async def handle_monthly_offers(message: types.Message):
-    await monthly_offers(bot=bot)
+    await send_monthly_offers(bot=bot)
+
+
+@dp.message(Command('cheap'))
+async def cheapest_offers(message: types.Message):
+    await send_cheapest_offers(bot=bot)
 
 
 async def main() -> None:
