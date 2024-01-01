@@ -1,8 +1,9 @@
 import os
-from datetime import datetime
+from pprint import pprint
 
 import requests
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 load_dotenv()
 
@@ -35,6 +36,36 @@ def get_grouped_prices_by_month(origin, destination):  # month in format 2023-12
         return response.json()["data"]
     else:
         return None
+
+
+def get_cheapest_offers(origin, destination):
+    depart_date, return_date = calculate_travel_dates()
+    url = (f"{BASE_URL_AVIASALES}v3/prices_for_dates"
+           f"?origin={origin}&destination={destination}"
+           f"&departure_at={depart_date}&return_at={return_date}"
+           f"&unique=false&sorting=price&direct=false"
+           f"&cy=rub&limit=5&page=1&one_way=false"
+           f"&token={os.getenv('AVIASALES_TOKEN')}")
+
+    response = requests.get(url=url)
+    if response.status_code == 200:
+        return response.json()["data"]
+    else:
+        return None
+
+
+def calculate_travel_dates():  # for get_cheap_offers and return date in format YYYY-MM
+    current_date = datetime.now()
+    days_left_in_month = (current_date.replace(day=1, month=current_date.month + 1) - current_date).days
+
+    if days_left_in_month > 7:
+        depart_date = return_date = current_date.strftime('%Y-%m')
+    else:
+        next_month = current_date.replace(day=1) + timedelta(days=32)
+        depart_date = current_date.strftime('%Y-%m')
+        return_date = next_month.strftime('%Y-%m')
+
+    return depart_date, return_date
 
 
 BASE_URL_ADMIN = 'http://' + os.getenv('LOCALHOST_IP') + '/api/v1'
