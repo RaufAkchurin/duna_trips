@@ -243,8 +243,8 @@ sudo systemctl stop bot
 sudo systemctl start django
 sudo systemctl start bot
 
-статус проверять вот так systemctl status django.service
-статус проверять вот так systemctl status bot.service
+systemctl status django.service
+systemctl status bot.service
 
 если что то неработает проверяем логи вот так
 

@@ -120,23 +120,34 @@ def special_offers_message(post):
     return message
 
 
+async def get_photo_path_by_host_ip(filename):
+    LOCALHOST_IP = os.getenv('LOCALHOST_IP')
+
+    if LOCALHOST_IP in ['127.0.0.1:8000', '0.0.0.0:8000']:
+        path = f"/home/rauf/PycharmProjects/duna_trips/trip_admin/media/post_pictures/{filename}"
+    else:
+        path = f"/root/duna_trips/trip_admin/media/post_pictures/{filename}"      # Смотри размещение у себя на сервере
+    return path
+
+
 async def special_offers(bot: Bot):
     posts = get_post_list()
     try:
         for post in posts:
             chat_id = post['chanel']["chanel_chat_id"]
             file_name = os.path.basename(post['picture'])
+            if file_name:
+                picture_path = await get_photo_path_by_host_ip(file_name)
             message = special_offers_message(post)
             if message:
                 await bot.send_photo(chat_id=chat_id,
-                                     photo=types.FSInputFile(
-                                         path=f"/root/duna_trips/trip_admin/media/post_pictures/{file_name}"),
+                                     photo=types.FSInputFile(path=picture_path),
                                      caption=message,
                                      parse_mode=ParseMode.HTML)
 
     except Exception as e:
-        await bot.send_message(chat_id='-1001956834579',
-                               text=str(e),
+        await bot.send_message(chat_id='5640395403',
+                               text="ERROR TEXT - " + str(e),
                                parse_mode=ParseMode.MARKDOWN,
                                disable_web_page_preview=True,
                                protect_content=False)

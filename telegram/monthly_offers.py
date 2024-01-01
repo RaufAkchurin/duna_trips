@@ -17,9 +17,10 @@ def monthly_offers_message(post):
     destinations = package_of_destinations(post)
     for destination in destinations:
         message += f" <b>\n{destination['origin_name'].upper()} - {destination['destination_name'].upper()}</b> \n\n"
-        tickets = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])[:10]
-        if tickets:
-            for ticket in tickets.values():
+        tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
+        tickets_cutted = dict(list(tickets_raw.items())[:5])
+        if tickets_cutted:
+            for ticket in tickets_cutted.values():
                 departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
                 formatted_time = departure_time.strftime("%H:%M")
 
@@ -41,7 +42,6 @@ async def monthly_offers(bot: Bot):
     try:
         for post in posts:
             chat_id = post['chanel']["chanel_chat_id"]
-            file_name = os.path.basename(post['picture'])
             message = monthly_offers_message(post)
             if message:
                 await bot.send_message(chat_id=chat_id,
@@ -50,8 +50,8 @@ async def monthly_offers(bot: Bot):
                                        parse_mode=ParseMode.HTML)
 
     except Exception as e:
-        await bot.send_message(chat_id='-1001956834579',
-                               text=str(e),
+        await bot.send_message(chat_id='5640395403',
+                               text="ERROR TEXT - " + str(e),
                                parse_mode=ParseMode.MARKDOWN,
                                disable_web_page_preview=True,
                                protect_content=False)

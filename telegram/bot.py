@@ -9,7 +9,6 @@ from aiogram.types import Message
 import os
 from dotenv import load_dotenv
 
-import bot_kb
 from monthly_offers import monthly_offers
 from special_offers import special_offers
 
