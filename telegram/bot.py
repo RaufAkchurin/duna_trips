@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 from monthly_offers import send_monthly_offers
 from special_offers import send_special_offers
-from telegram.cheapest_offers import send_cheapest_offers
+from cheapest_offers import send_cheapest_offers
 
 load_dotenv()
 
