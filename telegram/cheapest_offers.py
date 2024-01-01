@@ -6,7 +6,7 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
 from API import get_post_list, get_cheapest_offers
-from telegram.special_offers import package_of_destinations, data_formatted, price, link_generator, weekday
+from special_offers import package_of_destinations, data_formatted, price, link_generator, weekday
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
