@@ -39,11 +39,7 @@ async def start(message: Message):
     await bot.send_message(message.chat.id, text=
     f"Привет, бот запустился \n" \
     f"✈️ Желаем вам выгодных путешествий✈️ \n" \
-    "Перезапустить бота - /start"
-    , reply_markup=bot_kb.main_kb)
-
-
-dp.message.register(special_offers, F.text == 'Свежие билеты')
+    "Перезапустить бота - /start")
 
 
 @dp.message(Command('special_offers'))

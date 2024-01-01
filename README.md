@@ -235,11 +235,16 @@ WantedBy=multi-user.target
 
 
             **ПОСЛЕ ПАРВОК В КОНФИГЕ**
-**sudo systemctl daemon-reload**
-**sudo systemctl start django**
-**sudo systemctl start bot**
-статус проверять вот так **systemctl status django.service**
-статус проверять вот так **systemctl status bot.service**
+sudo systemctl daemon-reload
+
+sudo systemctl stop django
+sudo systemctl stop bot
+
+sudo systemctl start django
+sudo systemctl start bot
+
+статус проверять вот так systemctl status django.service
+статус проверять вот так systemctl status bot.service
 
 если что то неработает проверяем логи вот так
 

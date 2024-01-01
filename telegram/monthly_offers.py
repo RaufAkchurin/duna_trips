@@ -17,7 +17,7 @@ def monthly_offers_message(post):
     destinations = package_of_destinations(post)
     for destination in destinations:
         message += f" <b>\n{destination['origin_name'].upper()} - {destination['destination_name'].upper()}</b> \n\n"
-        tickets = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
+        tickets = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])[:10]
         if tickets:
             for ticket in tickets.values():
                 departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
@@ -46,6 +46,7 @@ async def monthly_offers(bot: Bot):
             if message:
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
+                                       disable_web_page_preview=True,
                                        parse_mode=ParseMode.HTML)
 
     except Exception as e:
