@@ -1,10 +1,8 @@
 import os
 from datetime import datetime
-
 from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
-
 from API import get_special_offers, get_post_list, put_post_last_view_changer
 
 load_dotenv()

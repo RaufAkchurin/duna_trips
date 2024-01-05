@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 
 from monthly_offers import send_monthly_offers
 from special_offers import send_special_offers
-from cheapest_offers import send_cheapest_offers
 
 load_dotenv()
 
@@ -45,9 +44,9 @@ async def handle_special_offers(message: types.Message):
     await send_special_offers(bot=bot)
 
 
-# @dp.message(Command('month'))
-# async def handle_monthly_offers(message: types.Message):
-#     await send_monthly_offers(bot=bot)
+@dp.message(Command('month'))
+async def handle_monthly_offers(message: types.Message):
+    await send_monthly_offers(bot=bot)
 #
 #
 # @dp.message(Command('cheap'))
