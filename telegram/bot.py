@@ -39,19 +39,9 @@ async def start(message: Message):
     "Перезапустить бота - /start")
 
 
-@dp.message(Command('spec'))
-async def handle_special_offers(message: types.Message):
-    await send_special_offers(bot=bot)
-
-
 @dp.message(Command('month'))
 async def handle_monthly_offers(message: types.Message):
     await send_monthly_offers(bot=bot)
-#
-#
-# @dp.message(Command('cheap'))
-# async def cheapest_offers(message: types.Message):
-#     await send_cheapest_offers(bot=bot)
 
 
 async def main() -> None:
