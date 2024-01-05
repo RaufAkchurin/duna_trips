@@ -11,7 +11,10 @@ BASE_URL_AVIASALES = 'https://api.travelpayouts.com/aviasales/'
 
 
 def get_special_offers(origin, destination):
-    url = (f"{BASE_URL_AVIASALES}v3/get_special_offers?destination={destination}&origin={origin}"
+    depart_date, return_date = calculate_travel_dates()
+    url = (f"{BASE_URL_AVIASALES}v3/get_special_offers?"
+           f"destination={destination}&origin={origin}"
+           f"&depart_date={depart_date}&return_date={return_date}"
            f"&locale=ru&token={os.getenv('AVIASALES_TOKEN')}")
     response = requests.get(url=url)
     if response.status_code == 200:

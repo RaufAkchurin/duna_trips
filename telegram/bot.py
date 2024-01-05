@@ -29,7 +29,6 @@ scheduler = AsyncIOScheduler()  # Автоматическая отправка 
 
 async def scheduler_setup(scheduler):
     scheduler.add_job(send_special_offers, "cron", day_of_week="mon,wed,sat", hour=6, minute=0, second=0, args=(bot,))
-    scheduler.add_job(send_cheapest_offers, "cron", day_of_week="mon,wed,sat", hour=8, minute=0, second=0, args=(bot,))
     scheduler.start()
 
 
@@ -46,14 +45,14 @@ async def handle_special_offers(message: types.Message):
     await send_special_offers(bot=bot)
 
 
-@dp.message(Command('month'))
-async def handle_monthly_offers(message: types.Message):
-    await send_monthly_offers(bot=bot)
-
-
-@dp.message(Command('cheap'))
-async def cheapest_offers(message: types.Message):
-    await send_cheapest_offers(bot=bot)
+# @dp.message(Command('month'))
+# async def handle_monthly_offers(message: types.Message):
+#     await send_monthly_offers(bot=bot)
+#
+#
+# @dp.message(Command('cheap'))
+# async def cheapest_offers(message: types.Message):
+#     await send_cheapest_offers(bot=bot)
 
 
 async def main() -> None:

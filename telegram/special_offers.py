@@ -142,8 +142,10 @@ async def send_special_offers(bot: Bot):
             message = special_offers_message(post)
             if message:
                 await bot.send_photo(chat_id=chat_id,
-                                     photo=types.FSInputFile(path=picture_path),
-                                     caption=message,
+                                     photo=types.FSInputFile(path=picture_path))
+
+                await bot.send_message(chat_id=chat_id,
+                                     text=message,
                                      parse_mode=ParseMode.HTML)
 
     except Exception as e:
