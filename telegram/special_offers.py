@@ -11,11 +11,12 @@ load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 
-def link_generator(link):
-    marker = "508478"  # айди профиля Travelpayouts чтобы учитывался процент с каждой продажи
-    res = f"https://aviasales.ru{link}"
-    res += f"&marker={marker}"
-    return res
+def link_generator_ticket(link):
+    # см файл информация о ссылках чтобы понять какие данные откуда берутся in link_with_referal
+
+    link_aviasales = f"https://aviasales.ru{link}"
+    link_with_referal = f"https://tp.media/r?marker=508478&trs=287693&p=4114&u={link_aviasales}&campaign_id=100 "
+    return link_with_referal
 
 
 def data_formatted(timestamp_str):
@@ -111,7 +112,7 @@ def special_offers_message(post):
                     f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
                     f"\n <i>{ticket['origin_name']}({ticket['origin']}) - {ticket['destination_name']}({ticket['destination']})</i>"
                     f"\n 💸 {price(ticket['price'])}"
-                    f"\n <a href='{link_generator(ticket['link'])}'>Купить билет</a>\n\n"
+                    f"\n <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n\n"
                 )
         else:
             pass

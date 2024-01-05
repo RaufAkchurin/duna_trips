@@ -1,0 +1,25 @@
+Здравствуйте,
+
+Благодарю за ожидание.
+
+К сожалению, полученная с помощью API данных ссылка не является партнёрской. Добавление в ссылку маркера также не делает её партнёрской. Однако вы можете воспользоваться шаблоном, чтобы самостоятельно формировать партнёрские ссылки на своей стороне. Давайте разберем партнерскую ссылку более подробно.
+
+Готовая партнерская ссылка с вашим маркером: https://tp.media/r?marker=508478&trs=287693&p=4114&u=https%3A%2F%2Faviasales.ru&campaign_id=100
+
+В ней:
+https://tp.media/r?— начало ссылки
+marker=508478 — ваш маркер
+trs=287693 — ID вашего проекта  ID ваших проектов вы можете найти тут: https://app.travelpayouts.com/profile/sources
+p=4114 — ID генератора ссылок
+u=https%3A%2F%2Faviasales.ru— URL в формате Unicode
+campaign_id=100 — ID программы  ID программы можно увидеть в ссылке на программу, к примеру, ID Авиасейлс — 100: https://app.travelpayouts.com/programs/100/about
+
+Таким образом, упомянутая вами ранее ссылка
+https://aviasales.ru/search/MCX2901IST1?t=DP17065212001706532000000180MCXIST_3f15df5a5b2c1c002bc2bb2a3ed72021_6785&search_date=02012024&expected_price_uuid=c907ad11-c38b-4559-861d-92c6c9e48802&expected_price_source=share&expected_price_currency=rub&expected_price=6785,
+ будет выглядеть следующим образом после преобразования в партнёрскую:
+https://tp.media/r?marker=508478&trs=287693&p=4114&u=https%3A%2F%2Faviasales.ru%2Fsearch%2FMCX2901IST1%3Ft%3DDP17065212001706532000000180MCXIST_3f15df5a5b2c1c002bc2bb2a3ed72021_6785%26search_date%3D02012024%26expected_price_uuid%3Dc907ad11-c38b-4559-861d-92c6c9e48802%26expected_price_source%3Dshare%26expected_price_currency%3Drub%26expected_price%3D6785&campaign_id=100. Клики по ней будут отображаться в вашей статистике, а бронирования закрепляться за вашим маркером.
+
+Если у вас остались вопросы, я буду рада на них ответить.
+
+Kind regards,
+Valerie

@@ -6,7 +6,7 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
 from API import get_post_list, get_grouped_prices_by_month
-from special_offers import package_of_destinations, data_formatted, link_generator, price, weekday
+from special_offers import package_of_destinations, data_formatted, link_generator_ticket, price, weekday
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -28,7 +28,7 @@ def monthly_offers_message(post):
                     f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
                     f"\n <i>{destination['origin_name'].capitalize()} ({ticket['origin']}) - {destination['destination_name'].capitalize()} ({ticket['destination']})</i>"
                     f"\n 💸 {price(ticket['price'])}"
-                    f"\n <a href='{link_generator(ticket['link'])}'>Купить билет</a>\n\n"
+                    f"\n <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n\n"
                 )
         else:
             pass
