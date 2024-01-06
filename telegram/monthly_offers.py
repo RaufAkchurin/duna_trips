@@ -11,7 +11,7 @@ load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 
-def sorting_tickets_by_price(tickets):
+def sorting_tickets_by_price(tickets, count_of_tickets_in_direction):
     # Здесь мы выдёргиваем все билеты на месяц, сортируем по цене и выдёргиваем 5 самых дешевых
 
     # Extract flight records from the data dictionary
@@ -21,7 +21,7 @@ def sorting_tickets_by_price(tickets):
     sorted_flights = sorted(flights, key=lambda x: x['price'])
 
     # Keep the 5 cheapest options
-    cheapest_flights = sorted_flights[:5]
+    cheapest_flights = sorted_flights[:count_of_tickets_in_direction]
 
     # Sort the 5 cheapest options by date
     sorted_cheapest_flights = sorted(cheapest_flights, key=lambda x: x['departure_at'])
@@ -37,7 +37,7 @@ def monthly_offers_message(post):
     for destination in destinations:
         message += f" \n <b>{destination['origin_name'].capitalize()} - {destination['destination_name'].capitalize()}</b> \n"
         tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
-        tickets_cutted = sorting_tickets_by_price(tickets_raw)
+        tickets_cutted = sorting_tickets_by_price(tickets_raw, post['count_of_tickets_in_direction'])
 
         if tickets_cutted:
             for ticket in tickets_cutted:
@@ -51,6 +51,7 @@ def monthly_offers_message(post):
                 )
         else:
             pass
+        #TODO засунуть в трай эксепт
 
     message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации."
     return message

@@ -45,6 +45,7 @@ class PostSerializer(serializers.ModelSerializer):
             "destinations",
             "last_viewed_destination_index",
             "count_of_directions_in_post",
+            "count_of_tickets_in_direction"
         )
 
     def get_destinations(self, Post):
