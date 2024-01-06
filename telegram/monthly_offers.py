@@ -29,11 +29,31 @@ def sorting_tickets_by_price(tickets, count_of_tickets_in_direction):
     return sorted_cheapest_flights
 
 
+def return_tickets_adding(destinations: list[dict]):
+    new_tickets = []
+    for ticket in destinations:
+        new_tickets.append(ticket)
+
+        # Создаем билет в обратном направлении
+        reverse_ticket = {
+            'origin_code': ticket['destination_code'],
+            'origin_name': ticket['destination_name'],
+            'destination_code': ticket['origin_code'],
+            'destination_name': ticket['origin_name']
+        }
+
+        new_tickets.append(reverse_ticket)
+    return new_tickets
+
+
 def monthly_offers_message(post):
     message = ""
-    if post['text']:
-        message += f"✈️  {post['text']}  ✈️ \n"
+    if post['text_before']:
+        message += f"✈️  {post['text_before']}  ✈️ \n"
     destinations = package_of_destinations(post)
+    if bool(post['return_tickets']):
+        destinations = return_tickets_adding(destinations)
+
     for destination in destinations:
         message += f" \n <b>{destination['origin_name'].capitalize()} - {destination['destination_name'].capitalize()}</b> \n"
         tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
@@ -50,10 +70,12 @@ def monthly_offers_message(post):
                     f"\n • <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n"
                 )
         else:
-            pass
-        #TODO засунуть в трай эксепт
+            message += "\n Билетов к сожалению нет в наличии =( \n"
 
-    message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации."
+    message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации. \n"
+    if post['text_after']:
+        message += "—————————————————— \n"
+        message += f"{post['text_after']}"
     return message
 
 

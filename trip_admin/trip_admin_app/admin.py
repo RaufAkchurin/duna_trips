@@ -26,7 +26,7 @@ class DestinationsInline(admin.TabularInline):  # Только для отобр
 
 class PostAdmin(admin.ModelAdmin):
     inlines = [DestinationsInline]
-    list_display = ("chanel", "text", "name",)
+    list_display = ("chanel", "text_before", "name",)
     list_filter = ("chanel",)
 
 

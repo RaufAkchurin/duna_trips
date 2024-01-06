@@ -66,7 +66,7 @@ def price(price):
 def package_of_destinations(post_json):
     path_list = post_json['destinations']
     last_index = int(post_json['last_viewed_destination_index'])
-    paths_per_batch = int(post_json['count_of_directions_in_post'])
+    paths_per_batch = 1  # int(post_json['count_of_directions_in_post'])  ЗАХАРДКОДИЛ ВРЕМЕННО(ПОКА НЕ ПОТРЕБУЕТСЯ ВОЗМОЖНОСТЬ МЕНЯТЬ)
 
     if not path_list or paths_per_batch <= 0:
         return None, None
