@@ -4,6 +4,7 @@ from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from API import get_special_offers, get_post_list, put_post_last_view_changer
+from urllib.parse import quote
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -11,9 +12,9 @@ GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 def link_generator_ticket(link):
     # см файл информация о ссылках чтобы понять какие данные откуда берутся in link_with_referal
-
-    link_aviasales = f"https://aviasales.ru{link}"
-    link_with_referal = f"https://tp.media/r?marker=508478&trs=287693&p=4114&u={link_aviasales}&campaign_id=100 "
+    link_aviasales = f"https://www.aviasales.ru{link}"
+    link_aviasales_unicode = quote(link_aviasales, safe="%")  # в юникоде должна быть линка для реферальной ссылки
+    link_with_referal = f"https://tp.media/r?marker=508478&trs=287693&p=4114&u={link_aviasales_unicode}&campaign_id=100 "
     return link_with_referal
 
 

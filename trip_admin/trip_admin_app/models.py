@@ -41,8 +41,8 @@ class City(models.Model):
 class Post(models.Model):
     name = models.CharField(max_length=40, verbose_name='Название')
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, verbose_name='Телеграм канал')
-    text_before = models.CharField(max_length=255, blank=True, null=True, verbose_name='Текст вначале (необъязательно)')
-    text_after = models.CharField(max_length=255, blank=True, null=True, verbose_name='Текст вконце (необъязательно)')
+    text_before = models.TextField(max_length=255, blank=True, null=True, verbose_name='Текст вначале (необъязательно)')
+    text_after = models.TextField(max_length=255, blank=True, null=True, verbose_name='Текст вконце (необъязательно)')
     picture = models.ImageField(upload_to='post_pictures/', verbose_name='Изображение поста')
     last_viewed_destination_index = models.IntegerField(default=-1, verbose_name='Индекс последнего опубликованого направления')
     return_tickets = models.BooleanField(default=False, verbose_name='Билеты обратно')

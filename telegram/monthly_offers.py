@@ -50,6 +50,7 @@ def monthly_offers_message(post):
     message = ""
     if post['text_before']:
         message += f"✈️  {post['text_before']}  ✈️ \n"
+
     destinations = package_of_destinations(post)
     if bool(post['return_tickets']):
         destinations = return_tickets_adding(destinations)
@@ -66,7 +67,7 @@ def monthly_offers_message(post):
 
                 message += (
                     f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
-                    f"\n 💸 {price(ticket['price'])}"
+                    f"\n 💸 {price(ticket['price'])} с ручной кладью"
                     f"\n • <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n"
                 )
         else:

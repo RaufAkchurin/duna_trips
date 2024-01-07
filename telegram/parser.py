@@ -27,38 +27,63 @@ def custom_firefox():
 
 def browser_with_options():
     browser = custom_firefox()
-    browser.get("https://www.aviasales.ru/search/MRV1301IST1?expected_price=10380&expected_price_currency=rub&expected_price_source=share&expected_price_uuid=f025a7f6-bbed-4bd0-90f8-2c15163f0601&expected_price_value=10380&request_source=ticket_url&search_date=02012024&search_label=Red+Wings&t=WZ17051472001705156200000150MRVIST_f56245a5cb9f44694a29e3d54c752050_10380&utm_source=ticket_sharing")
     return browser
 
 
-browser = browser_with_options()
-
-
-def find_by_xpath(xpath: str):
+def find_by_xpath(xpath: str, browser):
     return WebDriverWait(browser, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, xpath)))
 
 
+def get_data(url):
+    try:
+        browser = browser_with_options()
+        browser.get(url=url)
+        time.sleep(3)
+
+        ticket = find_by_xpath(
+            xpath=".highlighted-ticket__ticket > div:nth-child(1) > div:nth-child(1) > div:nth-child(2)",
+            browser=browser
+        )
+        ticket.click()
+        time.sleep(10)
+
+        # main_window = browser.current_window_handle
+        # popup_window_handle = None
+
+        # for handle in browser.window_handles:
+        #     if handle != main_window:
+        #         popup_window_handle = handle
+        #
+        # browser.switch_to.window(popup_window_handle)
+
+        my_data = browser.find_element(by=By.CLASS_NAME, value='ticket-desktop__side-container')
+        my_data
+
+        # time.sleep(5)
+        #
+        # with open("index_selenium.html", "w") as file:
+        #     file.write(browser.page_source)
+
+    except Exception as e:
+        print(e)
+
+    finally:
+        browser.close()
+        browser.quit()
 
 
-btn = find_by_xpath("div.ticket-desktop__share:nth-child(4) > div:nth-child(1) > button:nth-child(1) > svg:nth-child(1)")
-btn.click()
+def main():
+    get_data(
+        "https://www.aviasales.ru/search/MRV1301IST1?expected_price=10380&expected_price_currency=rub&expected_price_source=share&expected_price_uuid=f025a7f6-bbed-4bd0-90f8-2c15163f0601&expected_price_value=10380&request_source=ticket_url&search_date=02012024&search_label=Red+Wings&t=WZ17051472001705156200000150MRVIST_f56245a5cb9f44694a29e3d54c752050_10380&utm_source=ticket_sharing")
 
 
-# Запустите команду xclip для получения содержимого буфера обмена
-process = subprocess.Popen(['xclip', '-selection', 'clipboard', '-o'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-output, error = process.communicate()
+if __name__ == "__main__":
+    main()
 
-# Проверьте наличие ошибок
-if process.returncode == 0:
-    # Получите текст из вывода команды
-    copied_text = output.decode('utf-8').strip()
+#
+#
 
-    # Выведите содержимое буфера обмена или сохраните в переменной
-    print("Скопированный текст:", copied_text)
 
-    # Если вы хотите сохранить в переменной, просто присвойте значение переменной
-    # содержимому буфера обмена
-    your_variable = copied_text
-else:
-    # Выведите сообщение об ошибке, если не удалось получить содержимое буфера обмена
-    print("Ошибка при получении содержимого буфера обмена:", error.decode('utf-8'))
+# ticket_click = find_by_xpath(".highlighted-ticket__ticket > div:nth-child(1) > div:nth-child(1) > div:nth-child(2)").click()
+#
+# baggage_info =  find_by_xpath("div.s__bn8P2quViKWeH4_bMPib:nth-child(2)")
