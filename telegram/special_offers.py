@@ -4,7 +4,7 @@ from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from API import get_special_offers, get_post_list
-from telegram.utils import package_of_destinations, data_formatted, weekday, price, link_generator_ticket, \
+from utils import package_of_destinations, data_formatted, weekday, price, link_generator_ticket, \
     get_photo_path_by_host_ip
 
 load_dotenv()

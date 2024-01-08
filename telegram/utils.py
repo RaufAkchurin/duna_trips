@@ -6,7 +6,7 @@ from aiogram import types
 from API import put_post_last_view_changer
 from urllib.parse import quote
 
-from telegram.pictures_generator import picture_generator
+from pictures_generator import picture_generator
 
 
 def link_generator_ticket(link):
