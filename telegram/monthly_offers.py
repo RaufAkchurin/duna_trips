@@ -4,9 +4,7 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from aiogram import Bot, types
 from API import get_post_list, get_grouped_prices_by_month
-from special_offers import package_of_destinations, data_formatted, link_generator_ticket, price, weekday, \
-    get_photo_path_by_host_ip
-from telegram.pictures_generator import picture_generator
+from utils import data_formatted, price, link_generator_ticket, package_of_destinations, send_picture, weekday
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -14,9 +12,7 @@ GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 def sorting_tickets_by_price(tickets, count_of_tickets_in_direction):
     # Здесь мы выдёргиваем все билеты на месяц, сортируем по цене и выдёргиваем 5 самых дешевых
-
-    # TODO тут часто падает, добавить исключения
-    if tickets is not None:
+    if tickets is not None:  # тут часто падало, поэтому проверка на нан
         # Extract flight records from the data dictionary
         flights = list(tickets.values())
     else:
@@ -83,30 +79,6 @@ def monthly_offers_message(post):
         message += "—————————————————— \n"
         message += f"{post['text_after']}"
     return message
-
-
-def get_destination_name(post):
-    destinations = post['destinations']
-    index = post['last_viewed_destination_index'] + 1
-
-    if index >= len(destinations):
-        index = index % len(destinations)
-
-    return destinations[index]['destination_name']
-
-
-async def send_picture(bot, post, chat_id):
-    path_from_ai = picture_generator(get_destination_name(post=post))
-    if path_from_ai:
-        await bot.send_photo(chat_id=chat_id,
-                       photo=path_from_ai)
-
-    else:
-        file_name = os.path.basename(post['picture'])
-        if file_name:
-            path_from_db = get_photo_path_by_host_ip(file_name)
-            await bot.send_photo(chat_id=chat_id,
-                           photo=types.FSInputFile(path=path_from_db))
 
 
 async def send_monthly_offers(bot: Bot):

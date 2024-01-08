@@ -10,7 +10,6 @@ import os
 from dotenv import load_dotenv
 
 from monthly_offers import send_monthly_offers
-from special_offers import send_special_offers
 
 load_dotenv()
 
@@ -27,7 +26,7 @@ scheduler = AsyncIOScheduler()  # Автоматическая отправка 
 
 
 async def scheduler_setup(scheduler):
-    scheduler.add_job(send_special_offers, "cron", day_of_week="mon,wed,sat", hour=6, minute=0, second=0, args=(bot,))
+    scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat", hour=6, minute=0, second=0, args=(bot,))
     scheduler.start()
 
 
