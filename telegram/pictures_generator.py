@@ -9,15 +9,18 @@ def picture_generator(prompt: str):
 
     client = OpenAI(api_key=OPENAI_API_KEY)
 
-    response = client.images.generate(
-        model="dall-e-2",
-        prompt=prompt,
-        size="1024x1024",
-        quality="hd",
-        style="vivid",
-        n=1,
-    )
+    try:
+        response = client.images.generate(
+            model="dall-e-2",
+            prompt=prompt,
+            size="1024x1024",
+            quality="hd",
+            style="vivid",
+            n=1,
+        )
 
-    image_url = response.data[0].url
+        image_url = response.data[0].url
+        return image_url
 
-    return image_url
+    except Exception:
+        return None

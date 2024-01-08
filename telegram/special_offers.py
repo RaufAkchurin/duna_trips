@@ -120,7 +120,7 @@ def special_offers_message(post):
     return message
 
 
-async def get_photo_path_by_host_ip(filename):
+def get_photo_path_by_host_ip(filename):
     LOCALHOST_IP = os.getenv('LOCALHOST_IP')
 
     if LOCALHOST_IP in ['127.0.0.1:8000', '0.0.0.0:8000']:

@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
-from aiogram import Bot
+from aiogram import Bot, types
 from API import get_post_list, get_grouped_prices_by_month
 from special_offers import package_of_destinations, data_formatted, link_generator_ticket, price, weekday, \
     get_photo_path_by_host_ip
@@ -95,20 +95,28 @@ def get_destination_name(post):
     return destinations[index]['destination_name']
 
 
+async def send_picture(bot, post, chat_id):
+    path_from_ai = picture_generator(get_destination_name(post=post))
+    if path_from_ai:
+        await bot.send_photo(chat_id=chat_id,
+                       photo=path_from_ai)
+
+    else:
+        file_name = os.path.basename(post['picture'])
+        if file_name:
+            path_from_db = get_photo_path_by_host_ip(file_name)
+            await bot.send_photo(chat_id=chat_id,
+                           photo=types.FSInputFile(path=path_from_db))
+
+
 async def send_monthly_offers(bot: Bot):
     posts = get_post_list()
     try:
         for post in posts:
             chat_id = post['chanel']["chanel_chat_id"]
-            file_name = os.path.basename(post['picture'])
-            if file_name:
-                picture_path = await get_photo_path_by_host_ip(file_name)
             message = monthly_offers_message(post)
-            path = picture_generator(get_destination_name(post=post))
+            await send_picture(bot, post, chat_id)
             if message:
-                await bot.send_photo(chat_id=chat_id,
-                                     photo=path)
-
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
                                        parse_mode=ParseMode.HTML,
