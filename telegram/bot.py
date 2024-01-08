@@ -27,7 +27,6 @@ scheduler = AsyncIOScheduler()  # Автоматическая отправка 
 
 async def scheduler_setup(scheduler):
     scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat", hour=6, minute=0, second=0, args=(bot,))
-    scheduler.add_job(send_monthly_offers, "interval", minutes=1, args=(bot,))
     scheduler.start()
 
 
