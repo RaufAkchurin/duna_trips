@@ -12,7 +12,7 @@ def picture_generator(prompt: str):
     try:
         response = client.images.generate(
             model="dall-e-2",
-            prompt=prompt,
+            prompt=f"Watercolor picture of {prompt}",
             size="1024x1024",
             quality="hd",
             style="vivid",

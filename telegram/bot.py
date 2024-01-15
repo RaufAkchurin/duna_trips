@@ -1,6 +1,8 @@
 import logging
+import random
 import sys
 import asyncio
+from datetime import datetime, timedelta
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Bot, Dispatcher, F, types
@@ -26,7 +28,18 @@ scheduler = AsyncIOScheduler()  # Автоматическая отправка 
 
 
 async def scheduler_setup(scheduler):
-    scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat", hour=6, minute=0, second=0, args=(bot,))
+    # Генерация двух случайных времен для отправки сообщений
+    first_random_time = datetime.strptime("08:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 12 * 3600))  # До обеда
+    second_random_time = datetime.strptime("12:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 8 * 3600))  # После обеда
+
+    # Расписание для первого сообщения
+    scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat",
+                      hour=first_random_time.hour, minute=first_random_time.minute, second=first_random_time.second, args=(bot,))
+
+    # Расписание для второго сообщения
+    scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat",
+                      hour=second_random_time.hour, minute=second_random_time.minute, second=second_random_time.second, args=(bot,))
+
     scheduler.start()
 
 
