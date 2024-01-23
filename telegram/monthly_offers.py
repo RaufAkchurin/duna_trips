@@ -4,7 +4,8 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from aiogram import Bot, types
 from API import get_post_list, get_grouped_prices_by_month
-from utils import data_formatted, price, link_generator_ticket, package_of_destinations, send_picture, weekday
+from utils import data_formatted, price, link_generator_ticket, package_of_destinations, send_picture, weekday, \
+    get_transfers_info
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -69,6 +70,7 @@ def monthly_offers_message(post):
                 message += (
                     f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
                     f"\n 💸 {price(ticket['price'])} с ручной кладью"
+                    f"\n 💸 {get_transfers_info(ticket['transfers'])}"
                     f"\n • <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n"
                 )
         else:

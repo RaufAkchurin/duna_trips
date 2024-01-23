@@ -55,6 +55,13 @@ def weekday(timestamp_str):
     return f"{week_days.get(str(weekday))}"
 
 
+def get_transfers_info(transfer_str):
+    if int(transfer_str) > 0:
+        return "✅Прямой рейс"
+    else:
+        return "⚠️Рейс с пересадкой"
+
+
 def price(price):
     if price is None:
         return None
@@ -102,7 +109,7 @@ def get_photo_path_by_host_ip(filename):
     if LOCALHOST_IP in ['127.0.0.1:8000', '0.0.0.0:8000']:
         path = f"/home/rauf/PycharmProjects/duna_trips/trip_admin/media/post_pictures/{filename}"
     else:
-        path = f"/root/duna_trips/trip_admin/media/post_pictures/{filename}"      # Смотри размещение у себя на сервере
+        path = f"/root/duna_trips/trip_admin/media/post_pictures/{filename}"  # Смотри размещение у себя на сервере
     return path
 
 
