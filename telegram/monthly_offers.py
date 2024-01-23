@@ -89,7 +89,7 @@ async def send_monthly_offers(bot: Bot):
         for post in posts:
             chat_id = post['chanel']["chanel_chat_id"]
             message = monthly_offers_message(post)
-            # await send_picture(bot, post, chat_id)
+            await send_picture(bot, post, chat_id)
             if message:
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
