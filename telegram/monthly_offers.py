@@ -70,7 +70,7 @@ def monthly_offers_message(post):
                 message += (
                     f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
                     f"\n 💸 {price(ticket['price'])} с ручной кладью"
-                    f"\n 💸 {get_transfers_info(ticket['transfers'])}"
+                    f"\n {get_transfers_info(ticket['transfers'])}"
                     f"\n • <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n"
                 )
         else:
