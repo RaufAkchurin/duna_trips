@@ -13,14 +13,14 @@ GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 def sorting_tickets_by_price(tickets, count_of_tickets_in_direction):
     # Здесь мы выдёргиваем все билеты на месяц, сортируем по цене и выдёргиваем 5 самых дешевых
-    if tickets is not None:  # тут часто падало, поэтому проверка на нан
+    if tickets is not None:
         # Extract flight records from the data dictionary
         flights = list(tickets.values())
     else:
         return None
 
-    # Sort flights by price
-    sorted_flights = sorted(flights, key=lambda x: x['price'])
+    # Sort flights by transfers and then by price
+    sorted_flights = sorted(flights, key=lambda x: (x['transfers'], x['price']))
 
     # Keep the 5 cheapest options
     cheapest_flights = sorted_flights[:count_of_tickets_in_direction]
@@ -89,7 +89,7 @@ async def send_monthly_offers(bot: Bot):
         for post in posts:
             chat_id = post['chanel']["chanel_chat_id"]
             message = monthly_offers_message(post)
-            await send_picture(bot, post, chat_id)
+            # await send_picture(bot, post, chat_id)
             if message:
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
