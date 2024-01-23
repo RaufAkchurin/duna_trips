@@ -56,7 +56,7 @@ def weekday(timestamp_str):
 
 
 def get_transfers_info(transfer_str):
-    if int(transfer_str) > 0:
+    if int(transfer_str) == 0:
         return "✅Прямой рейс"
     else:
         return "⚠️Рейс с пересадкой"
