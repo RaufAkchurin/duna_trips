@@ -11,11 +11,10 @@ def picture_generator(prompt: str):
 
     try:
         response = client.images.generate(
-            model="dall-e-2",
+            model="dall-e-3",
             prompt=f"watercolor-style image depicting a scene in {prompt}",
             size="1024x1024",
             quality="hd",
-            style="vivid",
             n=1,
         )
 
