@@ -9,6 +9,13 @@ from urllib.parse import quote
 from pictures_generator import picture_generator
 
 
+def get_city_name(city: str) -> str:
+    if len(city.split("-")) > 1:
+        return '-'.join([x.capitalize() for x in city.split("-")])
+    else:
+        return city.capitalize()
+
+
 def link_generator_ticket(link):
     # см файл информация о ссылках чтобы понять какие данные откуда берутся in link_with_referal
     link_aviasales = f"https://www.aviasales.ru{link}"

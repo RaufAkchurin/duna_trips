@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, types
 from API import get_post_list, get_grouped_prices_by_month
 from utils import data_formatted, price, link_generator_ticket, package_of_destinations, send_picture, weekday, \
-    get_transfers_info
+    get_transfers_info, get_city_name
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -58,7 +58,7 @@ def monthly_offers_message(post):
         destinations = return_tickets_adding(destinations)
 
     for destination in destinations:
-        message += f" \n <b>{'-'.join([x.capitalize() for x in destination['origin_name']])} - {'-'.join([x.capitalize() for x in destination['destination_name']])}</b> \n"
+        message += f" \n <b>{get_city_name(destination['origin_name'])} - {get_city_name(destination['destination_name'])}</b> \n"
         tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
         tickets_cutted = sorting_tickets_by_price(tickets_raw, post['count_of_tickets_in_direction'])
 
