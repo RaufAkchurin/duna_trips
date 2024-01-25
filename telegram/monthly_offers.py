@@ -58,7 +58,7 @@ def monthly_offers_message(post):
         destinations = return_tickets_adding(destinations)
 
     for destination in destinations:
-        message += f" \n <b>{destination['origin_name'].capitalize()} - {destination['destination_name'].capitalize()}</b> \n"
+        message += f" \n <b>{'-'.join([x.capitalize() for x in destination['origin_name']])} - {'-'.join([x.capitalize() for x in destination['destination_name']])}</b> \n"
         tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
         tickets_cutted = sorting_tickets_by_price(tickets_raw, post['count_of_tickets_in_direction'])
 
