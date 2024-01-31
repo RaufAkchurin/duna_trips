@@ -23,9 +23,18 @@ def get_special_offers(origin, destination):
         return None
 
 
-def get_current_month():  # month in format 2023-12
+def get_current_month():  # if to the end this month < 15 dsys - return with next month
     current_date = datetime.now()
-    formatted_month = current_date.strftime('%Y-%m')
+    days_until_end_of_month = (
+            datetime(current_date.year, current_date.month % 12 + 1, 1) - timedelta(days=1) - current_date).days
+
+    if days_until_end_of_month < 15:
+        next_month = current_date.replace(day=1, month=current_date.month % 12 + 1,
+                                          year=current_date.year + current_date.month // 12)
+        formatted_month = next_month.strftime('%Y-%m')
+    else:
+        formatted_month = current_date.strftime('%Y-%m')
+
     return formatted_month
 
 
