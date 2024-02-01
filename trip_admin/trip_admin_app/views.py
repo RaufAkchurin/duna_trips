@@ -1,6 +1,5 @@
-
-from .models import Chanel, Post
-from .serializers import ChanelSerializer, PostSerializer, PostLastViewSerializer
+from .models import Chanel, Post, Log
+from .serializers import ChanelSerializer, PostSerializer, PostLastViewSerializer, LogCreateViewSerializer
 from rest_framework import viewsets
 
 
@@ -25,10 +24,7 @@ class PostLastViewChanger(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-
-
-
-
-
-
+class LogCreate(viewsets.ModelViewSet):
+    serializer_class = LogCreateViewSerializer
+    queryset = Log.objects.all()
 

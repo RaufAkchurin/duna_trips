@@ -102,3 +102,9 @@ def put_post_last_view_changer(post_id, new_last_view):
         return response.json()
     else:
         return None
+
+
+def create_log(title: str, body: str):
+    url = f"{BASE_URL_ADMIN}/log_create"
+    response = requests.post(url=url, data={"title": title, "body": body})
+    return response.json()

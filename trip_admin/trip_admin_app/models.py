@@ -43,13 +43,13 @@ class Post(models.Model):
     chanel = models.ForeignKey(Chanel, on_delete=models.CASCADE, verbose_name='Телеграм канал')
     text_before = models.TextField(max_length=255, blank=True, null=True, verbose_name='Текст вначале (необъязательно)')
     text_after = models.TextField(max_length=255, blank=True, null=True, verbose_name='Текст вконце (необъязательно)')
-    picture = models.ImageField(upload_to='post_pictures/', verbose_name='Изображение поста (отобразится если недоступна генерация через ИИ)')
-    last_viewed_destination_index = models.IntegerField(default=-1, verbose_name='Индекс последнего опубликованого направления')
+    picture = models.ImageField(upload_to='post_pictures/',
+                                verbose_name='Изображение поста (отобразится если недоступна генерация через ИИ)')
+    last_viewed_destination_index = models.IntegerField(default=-1,
+                                                        verbose_name='Индекс последнего опубликованого направления')
     return_tickets = models.BooleanField(default=False, verbose_name='Билеты обратно')
-    # count_of_directions_in_post = models.IntegerField(
-    #     default=4,
-    #     validators=[MinValueValidator(1), MaxValueValidator(4)],  # becouse length links too long for caption under photo
-    #     verbose_name='Направлений полета в посте')    #
+    max_price_of_tickets = models.IntegerField(default=8000, verbose_name='Максимально допустимая цена билета')
+
     count_of_tickets_in_direction = models.PositiveIntegerField(
         default=5,
         verbose_name='Билетов для каждого направления'
@@ -75,3 +75,16 @@ class Destination(models.Model):
 
     def __str__(self):
         return f"Из {self.origin.name} в {self.destination.name}"
+
+
+class Log(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Заголовок')
+    body = models.TextField(verbose_name='Текст ошибки')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
+
+    class Meta:
+        verbose_name = 'Лог'
+        verbose_name_plural = 'Логи'
+
+    def __str__(self):
+        return f"{self.title}"

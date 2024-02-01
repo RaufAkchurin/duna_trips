@@ -2,8 +2,8 @@ import os
 from datetime import datetime
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
-from aiogram import Bot, types
-from API import get_post_list, get_grouped_prices_by_month
+from aiogram import Bot
+from API import get_post_list, get_grouped_prices_by_month, create_log
 from utils import data_formatted, price, link_generator_ticket, package_of_destinations, send_picture, weekday, \
     get_transfers_info, get_city_name
 
@@ -11,19 +11,22 @@ load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 
-def sorting_tickets_by_price(tickets, count_of_tickets_in_direction):
-    # Здесь мы выдёргиваем все билеты на месяц, сортируем по цене и выдёргиваем 5 самых дешевых
+def sorting_tickets_by_price(tickets, post):
+    # Здесь мы выдёргиваем все билеты на месяц, сортируем по цене и выдёргиваем нужное количество самых дешевых
     if tickets is not None:
         # Extract flight records from the data dictionary
         flights = list(tickets.values())
     else:
         return None
 
+    # filer flights by maximum price of tickets
+    flights = [x for x in flights if x['price'] <= post["max_price_of_tickets"]]
+
     # Sort flights by transfers and then by price
     sorted_flights = sorted(flights, key=lambda x: (x['transfers'], x['price']))
 
     # Keep the 5 cheapest options
-    cheapest_flights = sorted_flights[:count_of_tickets_in_direction]
+    cheapest_flights = sorted_flights[:post['count_of_tickets_in_direction']]
 
     # Sort the 5 cheapest options by date
     sorted_cheapest_flights = sorted(cheapest_flights, key=lambda x: x['departure_at'])
@@ -48,38 +51,62 @@ def return_tickets_adding(destinations: list[dict]):
     return new_tickets
 
 
-def monthly_offers_message(post):
-    message = ""
-    if post['text_before']:
-        message += f"✈️  {post['text_before']}  ✈️ \n"
-
+def get_destinations_for_post(post):
     destinations = package_of_destinations(post)
     if bool(post['return_tickets']):
         destinations = return_tickets_adding(destinations)
+    return destinations
 
+
+def get_tickets_cutted(destination, post):
+    tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
+    tickets_cutted = sorting_tickets_by_price(tickets_raw, post)
+    return tickets_cutted, tickets_raw
+
+
+def add_tickets_info_to_message(destination, message: str, tickets_cutted) -> str:
+    message += f" \n <b>{get_city_name(destination['origin_name'])} - {get_city_name(destination['destination_name'])}</b> \n"
+
+    for ticket in tickets_cutted:
+        departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
+        formatted_time = departure_time.strftime("%H:%M")
+
+        message += (
+            f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
+            f"\n 💸 {price(ticket['price'])} с ручной кладью"
+            f"\n {get_transfers_info(ticket['transfers'])}"
+            f"\n • <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n"
+        )
+
+    return message
+
+
+def monthly_offers_message_processing(post):
+    message = ""
+    if post['text_before']:
+        message += f"✈️  {post['text_before']}  ✈️ \n"
+    destinations = get_destinations_for_post(post)
     for destination in destinations:
-        message += f" \n <b>{get_city_name(destination['origin_name'])} - {get_city_name(destination['destination_name'])}</b> \n"
-        tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
-        tickets_cutted = sorting_tickets_by_price(tickets_raw, post['count_of_tickets_in_direction'])
+        tickets_cutted, tickets_raw = get_tickets_cutted(destination, post)
 
         if tickets_cutted:
-            for ticket in tickets_cutted:
-                departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
-                formatted_time = departure_time.strftime("%H:%M")
-
-                message += (
-                    f"\n 🔥<b>{data_formatted(ticket['departure_at'])}</b> | {formatted_time} | {weekday(ticket['departure_at'])}"
-                    f"\n 💸 {price(ticket['price'])} с ручной кладью"
-                    f"\n {get_transfers_info(ticket['transfers'])}"
-                    f"\n • <a href='{link_generator_ticket(ticket['link'])}'>Купить билет</a>\n"
-                )
+            message = add_tickets_info_to_message(destination, message, tickets_cutted)
         else:
-            message += "\n Билетов к сожалению нет в наличии =( \n"
+            title = "monthly_offers_message"
+            body = f'''
+                     \n Пост -  {post['id']}
+                     \n Destanation -  {destination}
+                     \n tickets_raw -  {tickets_raw}
+                     \n Пост с билетами по данному направлению пропущен
+                    '''
+            create_log(title=title, body=body)
+            return None
 
     message += "\n ⚠️ Цена и наличие билетов актуальны на момент публикации. \n"
     if post['text_after']:
         message += "—————————————————— \n"
         message += f"{post['text_after']}"
+
     return message
 
 
@@ -88,9 +115,9 @@ async def send_monthly_offers(bot: Bot):
     try:
         for post in posts:
             chat_id = post['chanel']["chanel_chat_id"]
-            message = monthly_offers_message(post)
-            await send_picture(bot, post, chat_id)
+            message = monthly_offers_message_processing(post)
             if message:
+                await send_picture(bot, post, chat_id)
                 await bot.send_message(chat_id=chat_id,
                                        text=message,
                                        parse_mode=ParseMode.HTML,
