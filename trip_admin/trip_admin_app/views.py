@@ -1,3 +1,7 @@
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Chanel, Post, Log
 from .serializers import ChanelSerializer, PostSerializer, PostLastViewSerializer, LogCreateViewSerializer
 from rest_framework import viewsets
@@ -8,9 +12,16 @@ class ChanelListView(viewsets.ModelViewSet):
     queryset = Chanel.objects.all()
 
 
-class PostViewSet(viewsets.ModelViewSet):
+class PostsListViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+
+
+class PostDetailView(APIView):
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
 
 
 class PostLastViewChanger(viewsets.ModelViewSet):
@@ -27,4 +38,3 @@ class PostLastViewChanger(viewsets.ModelViewSet):
 class LogCreate(viewsets.ModelViewSet):
     serializer_class = LogCreateViewSerializer
     queryset = Log.objects.all()
-

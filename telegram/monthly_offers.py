@@ -3,7 +3,7 @@ from datetime import datetime
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from aiogram import Bot
-from API import get_post_list, get_grouped_prices_by_month, create_log
+from API import get_post_list, get_grouped_prices_by_month, create_log, get_post_details
 from utils import data_formatted, price, link_generator_ticket, send_picture, weekday, \
     get_transfers_info, get_city_name, get_single_destination, get_package_of_destinations
 
@@ -34,28 +34,27 @@ def sorting_tickets_by_price(tickets, post):
     return sorted_cheapest_flights
 
 
-def return_tickets_adding(destinations: list[dict]):
-    new_tickets = []
+def return_destinations_adding(destinations: list[dict]):
+    new_destinations = []
     for ticket in destinations:
-        new_tickets.append(ticket)
+        new_destinations.append(ticket)
 
-        # Создаем билет в обратном направлении
-        reverse_ticket = {
+        reverse_destination = {
             'origin_code': ticket['destination_code'],
             'origin_name': ticket['destination_name'],
             'destination_code': ticket['origin_code'],
             'destination_name': ticket['origin_name']
         }
 
-        new_tickets.append(reverse_ticket)
-    return new_tickets
+        new_destinations.append(reverse_destination)
+    return new_destinations
 
 
-def get_destinations_for_post(post):
-    destinations = get_single_destination(post)
+def get_single_destination_with_return(post):
+    destination = get_single_destination(post)
     if bool(post['return_tickets']):
-        destinations = return_tickets_adding(destinations)
-    return destinations
+        destination = return_destinations_adding(destination)
+    return destination
 
 
 def get_tickets_cutted(destination, post):
@@ -66,6 +65,7 @@ def get_tickets_cutted(destination, post):
 
 def add_tickets_info_to_message(destination, message: str, tickets_cutted) -> str:
     message += f" \n <b>{get_city_name(destination['origin_name'])} - {get_city_name(destination['destination_name'])}</b> \n"
+    print("куда летим - ", destination['destination_name'])
 
     for ticket in tickets_cutted:
         departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
@@ -81,12 +81,12 @@ def add_tickets_info_to_message(destination, message: str, tickets_cutted) -> st
     return message
 
 
-def monthly_offers_message_processing(post):
+def monthly_offers_message_processing(post_id, single_destination_with_return):
+    post = get_post_details(post_id)
     message = ""
     if post['text_before']:
         message += f"✈️  {post['text_before']}  ✈️ \n"
-    destinations = get_destinations_for_post(post)
-    for destination in destinations:
+    for destination in single_destination_with_return:
         tickets_cutted, tickets_raw = get_tickets_cutted(destination, post)
 
         if tickets_cutted:
@@ -111,17 +111,21 @@ def monthly_offers_message_processing(post):
 
 
 async def send_monthly_offers(bot: Bot):
-    posts = get_post_list()
+    post_ids = [x["id"] for x in get_post_list()]
     try:
-        for post in posts:
-            chat_id = post['chanel']["chanel_chat_id"]
-            message = monthly_offers_message_processing(post)
-            if message:
-                await send_picture(bot, post, chat_id)
-                await bot.send_message(chat_id=chat_id,
-                                       text=message,
-                                       parse_mode=ParseMode.HTML,
-                                       disable_web_page_preview=True)
+        for post_id in post_ids:
+            post = get_post_details(post_id)
+            if post is not None:
+                destination = get_single_destination_with_return(post)
+                message = monthly_offers_message_processing(post_id, destination)
+                if message:
+                    await send_picture(bot, post_id, destination)
+
+                    chat_id = post['chanel']["chanel_chat_id"]
+                    await bot.send_message(chat_id=chat_id,
+                                           text=message,
+                                           parse_mode=ParseMode.HTML,
+                                           disable_web_page_preview=True)
 
     except Exception as e:
         await bot.send_message(chat_id='5640395403',

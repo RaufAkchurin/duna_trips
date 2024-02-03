@@ -3,7 +3,7 @@ from datetime import datetime
 
 from aiogram import types
 
-from API import put_post_last_view_changer
+from API import put_post_last_view_changer, get_post_details
 from urllib.parse import quote
 
 from pictures_generator import picture_generator
@@ -77,7 +77,8 @@ def price(price):
         return price
 
 
-def get_package_of_destinations(post_json):  # Вытаскивает заданное количество направлений и всё, сейчас же по умолчанию только одно направление
+def get_package_of_destinations(
+        post_json):  # Вытаскивает заданное количество направлений и всё, сейчас же по умолчанию только одно направление
     path_list = post_json['destinations']
     last_index = int(post_json['last_viewed_destination_index'])
     paths_per_batch = 1  # int(post_json['count_of_directions_in_post'])  ЗАХАРДКОДИЛ ВРЕМЕННО(ПОКА НЕ ПОТРЕБУЕТСЯ ВОЗМОЖНОСТЬ МЕНЯТЬ)
@@ -128,11 +129,6 @@ def get_single_destination(post_json):
             return [destinations[current_index]]
 
 
-
-
-
-
-
 def get_photo_path_by_host_ip(filename):
     LOCALHOST_IP = os.getenv('LOCALHOST_IP')
 
@@ -143,18 +139,13 @@ def get_photo_path_by_host_ip(filename):
     return path
 
 
-def get_destination_name(post):
-    destinations = post['destinations']
-    index = post['last_viewed_destination_index'] + 1
+async def send_picture(bot, post_id, destination):
+    post = get_post_details(post_id)
+    chat_id = post['chanel']["chanel_chat_id"]
+    prompt = destination[0]["destination_name"]
+    print("Картинка для", prompt)
+    path_from_ai = picture_generator(prompt)
 
-    if index >= len(destinations):
-        index = index % len(destinations)
-
-    return destinations[index]['destination_name']
-
-
-async def send_picture(bot, post, chat_id):
-    path_from_ai = picture_generator(get_destination_name(post=post))
     if path_from_ai:
         await bot.send_photo(chat_id=chat_id,
                              photo=path_from_ai)
