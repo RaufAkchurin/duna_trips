@@ -35,9 +35,6 @@ class LogAdmin(admin.ModelAdmin):
     list_display = ("title", "body", "date",)
     list_filter = ("title", "date")
 
-    def has_module_permission(self, request):
-        return request.user.username in ['rauf', 'admin']
-
 
 admin.site.register(Chanel)
 admin.site.register(Post, PostAdmin)

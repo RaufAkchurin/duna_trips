@@ -3,7 +3,7 @@ from datetime import datetime
 
 from aiogram import types
 
-from API import put_post_last_view_changer, get_post_details
+from API import put_post_last_view_changer, get_post_details, create_log
 from urllib.parse import quote
 
 from pictures_generator import picture_generator
@@ -128,6 +128,16 @@ def get_single_destination(post_json):
             put_post_last_view_changer(post_id=post_json['id'], new_last_view=current_index + 1)
             return [destinations[current_index]]
 
+    # if we came here then we don't have any destination with tickets
+    title = "def get_single_destination"
+    body = f'''
+             \n Пост -  {post_json['id']}
+             \n Билетов для данного направления небыло найдено
+             \n Возможно причина в слишком низкой допустимой цене - {post_json['max_price_of_tickets']}
+            '''
+    create_log(title=title, body=body)
+    return None
+
 
 def get_photo_path_by_host_ip(filename):
     LOCALHOST_IP = os.getenv('LOCALHOST_IP')
@@ -143,7 +153,6 @@ async def send_picture(bot, post_id, destination):
     post = get_post_details(post_id)
     chat_id = post['chanel']["chanel_chat_id"]
     prompt = destination[0]["destination_name"]
-    print("Картинка для", prompt)
     path_from_ai = picture_generator(prompt)
 
     if path_from_ai:

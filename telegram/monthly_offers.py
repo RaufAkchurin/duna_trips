@@ -52,10 +52,12 @@ def return_destinations_adding(destinations: list[dict]):
 
 def get_single_destination_with_return(post):
     destination = get_single_destination(post)
-    if bool(post['return_tickets']):
-        destination = return_destinations_adding(destination)
-    return destination
-
+    if destination is not None:
+        if bool(post['return_tickets']):
+            destination = return_destinations_adding(destination)
+        return destination
+    else:
+        return None
 
 def get_tickets_cutted(destination, post):
     tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
@@ -65,7 +67,6 @@ def get_tickets_cutted(destination, post):
 
 def add_tickets_info_to_message(destination, message: str, tickets_cutted) -> str:
     message += f" \n <b>{get_city_name(destination['origin_name'])} - {get_city_name(destination['destination_name'])}</b> \n"
-    print("куда летим - ", destination['destination_name'])
 
     for ticket in tickets_cutted:
         departure_time = datetime.fromisoformat(ticket['departure_at'][:-6])
@@ -117,15 +118,16 @@ async def send_monthly_offers(bot: Bot):
             post = get_post_details(post_id)
             if post is not None:
                 destination = get_single_destination_with_return(post)
-                message = monthly_offers_message_processing(post_id, destination)
-                if message:
-                    await send_picture(bot, post_id, destination)
+                if destination is not None:
+                    message = monthly_offers_message_processing(post_id, destination)
+                    if message:
+                        await send_picture(bot, post_id, destination)
 
-                    chat_id = post['chanel']["chanel_chat_id"]
-                    await bot.send_message(chat_id=chat_id,
-                                           text=message,
-                                           parse_mode=ParseMode.HTML,
-                                           disable_web_page_preview=True)
+                        chat_id = post['chanel']["chanel_chat_id"]
+                        await bot.send_message(chat_id=chat_id,
+                                               text=message,
+                                               parse_mode=ParseMode.HTML,
+                                               disable_web_page_preview=True)
 
     except Exception as e:
         await bot.send_message(chat_id='5640395403',
