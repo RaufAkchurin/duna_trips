@@ -111,6 +111,8 @@ def get_package_of_destinations(post_json):  # Вытаскивает задан
 
 
 def get_single_destination(post_json):
+    from telegram.monthly_offers import get_tickets_cutted
+
     destinations = post_json['destinations']
     count_of_destinations = len(post_json['destinations'])
     last_index = int(post_json['last_viewed_destination_index'])
@@ -119,9 +121,13 @@ def get_single_destination(post_json):
         return None
 
     for _ in range(count_of_destinations):
-        current_index = [last_index % count_of_destinations]
+        current_index = last_index % count_of_destinations
         last_index += 1
-        print(current_index)
+        if len(get_tickets_cutted(destinations[current_index], post_json)[0]) > 1:
+            put_post_last_view_changer(post_id=post_json['id'], new_last_view=current_index + 1)
+            return [destinations[current_index]]
+
+
 
 
 

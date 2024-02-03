@@ -4,8 +4,8 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from aiogram import Bot
 from API import get_post_list, get_grouped_prices_by_month, create_log
-from utils import data_formatted, price, link_generator_ticket, get_package_of_destinations, send_picture, weekday, \
-    get_transfers_info, get_city_name, get_single_destination
+from utils import data_formatted, price, link_generator_ticket, send_picture, weekday, \
+    get_transfers_info, get_city_name, get_single_destination, get_package_of_destinations
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
