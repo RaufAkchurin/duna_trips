@@ -77,7 +77,7 @@ def price(price):
         return price
 
 
-def package_of_destinations(post_json):
+def get_package_of_destinations(post_json):  # Вытаскивает заданное количество направлений и всё, сейчас же по умолчанию только одно направление
     path_list = post_json['destinations']
     last_index = int(post_json['last_viewed_destination_index'])
     paths_per_batch = 1  # int(post_json['count_of_directions_in_post'])  ЗАХАРДКОДИЛ ВРЕМЕННО(ПОКА НЕ ПОТРЕБУЕТСЯ ВОЗМОЖНОСТЬ МЕНЯТЬ)
@@ -108,6 +108,23 @@ def package_of_destinations(post_json):
                                new_last_view=last_index)  # Обновляем индекс последнего опубликованного направления
     # Возвращаем последний обработанный индекс и значения из списка путей (как список)
     return processed_paths
+
+
+def get_single_destination(post_json):
+    destinations = post_json['destinations']
+    count_of_destinations = len(post_json['destinations'])
+    last_index = int(post_json['last_viewed_destination_index'])
+
+    if destinations is None:
+        return None
+
+    for _ in range(count_of_destinations):
+        current_index = [last_index % count_of_destinations]
+        last_index += 1
+        print(current_index)
+
+
+
 
 
 def get_photo_path_by_host_ip(filename):

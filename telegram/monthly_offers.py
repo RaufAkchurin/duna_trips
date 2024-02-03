@@ -4,8 +4,8 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from aiogram import Bot
 from API import get_post_list, get_grouped_prices_by_month, create_log
-from utils import data_formatted, price, link_generator_ticket, package_of_destinations, send_picture, weekday, \
-    get_transfers_info, get_city_name
+from utils import data_formatted, price, link_generator_ticket, get_package_of_destinations, send_picture, weekday, \
+    get_transfers_info, get_city_name, get_single_destination
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -52,7 +52,7 @@ def return_tickets_adding(destinations: list[dict]):
 
 
 def get_destinations_for_post(post):
-    destinations = package_of_destinations(post)
+    destinations = get_single_destination(post)
     if bool(post['return_tickets']):
         destinations = return_tickets_adding(destinations)
     return destinations

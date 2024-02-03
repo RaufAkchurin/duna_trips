@@ -6,7 +6,7 @@ from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
 from API import get_post_list, get_cheapest_offers
-from special_offers import package_of_destinations, data_formatted, price, link_generator_ticket, weekday
+from special_offers import get_package_of_destinations, data_formatted, price, link_generator_ticket, weekday
 
 load_dotenv()
 GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
@@ -14,7 +14,7 @@ GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 def cheapest_offers_message(post):
     message = f"✈️  {post['text']}  ✈️ \n \n"
-    destinations = package_of_destinations(post)
+    destinations = get_package_of_destinations(post)
     for destination in destinations:
         tickets = get_cheapest_offers(destination['origin_code'], destination['destination_code'])
         if tickets:

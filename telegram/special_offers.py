@@ -4,7 +4,7 @@ from aiogram import Bot, types
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from API import get_special_offers, get_post_list
-from utils import package_of_destinations, data_formatted, weekday, price, link_generator_ticket, \
+from utils import get_package_of_destinations, data_formatted, weekday, price, link_generator_ticket, \
     get_photo_path_by_host_ip
 
 load_dotenv()
@@ -13,7 +13,7 @@ GROUP_CHAT_ID = os.getenv('GROUP_CHAT_ID')
 
 def special_offers_message(post):
     message = f"✈️  {post['text']}  ✈️ \n \n"
-    destinations = package_of_destinations(post)
+    destinations = get_package_of_destinations(post)
     for destination in destinations:
         tickets = get_special_offers(destination['origin_code'], destination['destination_code'])
         if tickets:
