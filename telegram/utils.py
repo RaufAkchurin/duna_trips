@@ -112,7 +112,7 @@ def get_package_of_destinations(
 
 
 def get_single_destination(post_json):
-    from telegram.monthly_offers import get_tickets_cutted
+    from monthly_offers import get_tickets_cutted
 
     destinations = post_json['destinations']
     count_of_destinations = len(post_json['destinations'])

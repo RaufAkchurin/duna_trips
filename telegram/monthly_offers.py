@@ -59,6 +59,7 @@ def get_single_destination_with_return(post):
     else:
         return None
 
+
 def get_tickets_cutted(destination, post):
     tickets_raw = get_grouped_prices_by_month(destination['origin_code'], destination['destination_code'])
     tickets_cutted = sorting_tickets_by_price(tickets_raw, post)
