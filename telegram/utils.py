@@ -125,7 +125,7 @@ def get_single_destination(post_json):
         current_index = last_index % count_of_destinations
         last_index += 1
         tickets_cutted = get_tickets_cutted(destinations[current_index], post_json)[0]
-        if tickets_cutted and len(tickets_cutted) > 1:
+        if tickets_cutted and len(tickets_cutted) >= 1:
                 put_post_last_view_changer(post_id=post_json['id'], new_last_view=current_index + 1)
                 return [destinations[current_index]]
 
