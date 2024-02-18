@@ -28,17 +28,19 @@ scheduler = AsyncIOScheduler()  # Автоматическая отправка 
 
 
 async def scheduler_setup(scheduler):
-    # Генерация двух случайных времен для отправки сообщений
-    first_random_time = datetime.strptime("08:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 12 * 3600))  # До обеда
-    second_random_time = datetime.strptime("12:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 8 * 3600))  # После обеда
+    first_random_time = datetime.strptime("08:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 3 * 3600))
+    second_random_time = datetime.strptime("12:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 3 * 3600))
+    third_random_time = datetime.strptime("16:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 5 * 3600))
 
-    # Расписание для первого сообщения
     scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat",
-                      hour=first_random_time.hour, minute=first_random_time.minute, second=first_random_time.second, args=(bot,))
-
-    # Расписание для второго сообщения
+                      hour=first_random_time.hour, minute=first_random_time.minute, second=first_random_time.second,
+                      args=(bot,))
     scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat",
-                      hour=second_random_time.hour, minute=second_random_time.minute, second=second_random_time.second, args=(bot,))
+                      hour=second_random_time.hour, minute=second_random_time.minute, second=second_random_time.second,
+                      args=(bot,))
+    scheduler.add_job(send_monthly_offers, "cron", day_of_week="mon,wed,sat",
+                      hour=third_random_time.hour, minute=third_random_time.minute, second=third_random_time.second,
+                      args=(bot,))
 
     scheduler.start()
 
