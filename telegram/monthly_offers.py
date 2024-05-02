@@ -121,7 +121,7 @@ async def send_monthly_offers(bot: Bot):
                 destination = get_single_destination_with_return(post)
                 if destination is not None:
                     message = monthly_offers_message_processing(post_id, destination)
-                    if message:
+                    if message and post.get('chanel').get('chanel_chat_id') == "-1002125473144":
                         await send_picture(bot, post_id, destination)
 
                         chat_id = post['chanel']["chanel_chat_id"]

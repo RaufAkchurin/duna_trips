@@ -28,19 +28,19 @@ scheduler = AsyncIOScheduler()  # Автоматическая отправка 
 
 
 async def scheduler_setup(scheduler):
-    first_random_time = datetime.strptime("08:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 3 * 3600))
+    # first_random_time = datetime.strptime("08:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 3 * 3600))
     second_random_time = datetime.strptime("12:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 3 * 3600))
-    third_random_time = datetime.strptime("16:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 5 * 3600))
+    # third_random_time = datetime.strptime("16:00:00", "%H:%M:%S") + timedelta(seconds=random.randint(0, 5 * 3600))
 
-    scheduler.add_job(send_monthly_offers, "cron",
-                      hour=first_random_time.hour, minute=first_random_time.minute, second=first_random_time.second,
-                      args=(bot,))
+    # scheduler.add_job(send_monthly_offers, "cron",
+    #                   hour=first_random_time.hour, minute=first_random_time.minute, second=first_random_time.second,
+    #                   args=(bot,))
     scheduler.add_job(send_monthly_offers, "cron",
                       hour=second_random_time.hour, minute=second_random_time.minute, second=second_random_time.second,
                       args=(bot,))
-    scheduler.add_job(send_monthly_offers, "cron",
-                      hour=third_random_time.hour, minute=third_random_time.minute, second=third_random_time.second,
-                      args=(bot,))
+    # scheduler.add_job(send_monthly_offers, "cron",
+    #                   hour=third_random_time.hour, minute=third_random_time.minute, second=third_random_time.second,
+    #                   args=(bot,))
 
     scheduler.start()
 
